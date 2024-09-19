@@ -50,7 +50,6 @@ const upload = multer({
 const authRoutes = require('./routes/authRoutes');
 
 // Use routes login dan register
-app.use('/auth', authRoutes);
 app.use('/login', authRoutes);
 app.use('/register', authRoutes);
 
