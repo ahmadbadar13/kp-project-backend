@@ -116,10 +116,10 @@ app.use('/api/divisi-hp-op/:id', divisiHpOpRoutes);
 app.use('/api/divisi-hp-op/:id', divisiHpOpRoutes);
 
 // Use routes operator (read comment)
-app.use('/api/komentar-divisi-hp/:id', divisiHpOpRoutes);
+app.use('/api/komentar-divisi-hp', divisiHpOpRoutes);
 
 // Use routes operator (delete comment)
-app.use('/api/komentar-divisi-hp/:id', divisiHpOpRoutes);
+app.use('/api/komentar-divisi-hp', divisiHpOpRoutes);
 // ==================================== End Operator ====================================
 
 // Struktur Organisasi
