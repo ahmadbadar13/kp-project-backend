@@ -87,39 +87,117 @@ app.use('/api/sub-bagian-tppph-adm', subBagianTppphAdmRoutes);
 app.use('/api/tambah-komentar-divisi-hp', divisiHpAdmRoutes);
 app.use('/api/tambah-komentar-divisi-kurl', divisiKurlAdmRoutes);
 app.use('/api/tambah-komentar-divisi-pdi', divisiPdiAdmRoutes);
-app.use('/api/tambah-komentar-divisi-sppp-sdm', divisiSpppSdmAdmRoutes);
+app.use('/api/tambah-komentar-divisi-sppp_sdm', divisiSpppSdmAdmRoutes);
 app.use('/api/tambah-komentar-divisi-tp', divisiTpAdmRoutes);
 
 app.use('/api/tambah-komentar-sekretaris', sekretarisAdmRoutes);
 
-app.use('/api/tambah-komentar-sub-bagian-hsdm', subBagianHsdmAdmRoutes);
-app.use('/api/tambah-komentar-sub-bagian-kul', subBagianKulAdmRoutes);
-app.use('/api/tambah-komentar-sub-bagian-pdi', subBagianPdiAdmRoutes);
-app.use('/api/tambah-komentar-sub-bagian-tppph', subBagianTppphAdmRoutes);
+app.use('/api/tambah-komentar-sb-hsdm', subBagianHsdmAdmRoutes);
+app.use('/api/tambah-komentar-sb-kul', subBagianKulAdmRoutes);
+app.use('/api/tambah-komentar-sb-pdi', subBagianPdiAdmRoutes);
+app.use('/api/tambah-komentar-sb-tppph', subBagianTppphAdmRoutes);
 // ==================================== End Admin ====================================
 
 // ==================================== Start Admin ====================================
 // Import routes operator
 
 const divisiHpOpRoutes = require('./routes/Operator/divisiHpOpRoutes');
+const divisiKurlOpRoutes = require('./routes/Operator/divisiKurlOpRoutes');
+const divisiPdiOpRoutes = require('./routes/Operator/divisiPdiOpRoutes');
+const divisiSpppSdmOpRoutes = require('./routes/Operator/divisiSpppSdmOpRoutes');
+const divisiTpOpRoutes = require('./routes/Operator/divisiTpOpRoutes');
+
+const sekretarisOpRoutes = require('./routes/Operator/sekretarisOpRoutes');
+
+const subBagianHsdmOpRoutes = require('./routes/Operator/subBagianHsdmOpRoutes');
+const subBagianKulOpRoutes = require('./routes/Operator/subBagianKulOpRoutes');
+const subBagianPdiOpRoutes = require('./routes/Operator/subBagianPdiOpRoutes');
+const subBagianTppphOpRoutes = require('./routes/Operator/subBagianTppphOpRoutes');
 
 // Use routes operator (create data)
 app.use('/api/divisi-hp-op', divisiHpOpRoutes);
+app.use('/api/divisi-kurl-op', divisiKurlOpRoutes);
+app.use('/api/divisi-pdi-op', divisiPdiOpRoutes);
+app.use('/api/divisi-sppp_sdm-op', divisiSpppSdmOpRoutes);
+app.use('/api/divisi-Tp-op', divisiTpOpRoutes);
+
+app.use('/api/sekretaris-op', sekretarisOpRoutes);
+
+app.use('/api/sub-bagian-hsdm-op', subBagianHsdmOpRoutes);
+app.use('/api/sub-bagian-kul-op', subBagianKulOpRoutes);
+app.use('/api/sub-bagian-pdi-op', subBagianPdiOpRoutes);
+app.use('/api/sub-bagian-tppph-op', subBagianTppphOpRoutes);
 
 // Use routes operator (read data)
 app.use('/api/divisi-hp-op', divisiHpOpRoutes);
+app.use('/api/divisi-kurl-op', divisiKurlOpRoutes);
+app.use('/api/divisi-pdi-op', divisiPdiOpRoutes);
+app.use('/api/divisi-sppp_sdm-op', divisiSpppSdmOpRoutes);
+app.use('/api/divisi-Tp-op', divisiTpOpRoutes);
+
+app.use('/api/sekretaris-op', sekretarisOpRoutes);
+
+app.use('/api/sub-bagian-hsdm-op', subBagianHsdmOpRoutes);
+app.use('/api/sub-bagian-kul-op', subBagianKulOpRoutes);
+app.use('/api/sub-bagian-pdi-op', subBagianPdiOpRoutes);
+app.use('/api/sub-bagian-tppph-op', subBagianTppphOpRoutes);
 
 // Use routes operator (update data)
 app.use('/api/divisi-hp-op/:id', divisiHpOpRoutes);
+app.use('/api/divisi-kurl-op/:id', divisiKurlOpRoutes);
+app.use('/api/divisi-pdi-op/:id', divisiPdiOpRoutes);
+app.use('/api/divisi-sppp_sdm-op/:id', divisiSpppSdmOpRoutes);
+app.use('/api/divisi-tp-op/:id', divisiTpOpRoutes);
+
+app.use('/api/sekretaris-op/:id', sekretarisOpRoutes);
+
+app.use('/api/sub-bagian-hsdm-op/:id', subBagianHsdmOpRoutes);
+app.use('/api/sub-bagian-kul-op/:id', subBagianKulOpRoutes);
+app.use('/api/sub-bagian-pdi-op/:id', subBagianPdiOpRoutes);
+app.use('/api/sub-bagian-tppph-op/:id', subBagianTppphOpRoutes);
 
 // Use routes operator (delete data)
 app.use('/api/divisi-hp-op/:id', divisiHpOpRoutes);
+app.use('/api/divisi-kurl-op/:id', divisiKurlOpRoutes);
+app.use('/api/divisi-pdi-op/:id', divisiPdiOpRoutes);
+app.use('/api/divisi-sppp_sdm-op/:id', divisiSpppSdmOpRoutes);
+app.use('/api/divisi-tp-op/:id', divisiTpOpRoutes);
+
+app.use('/api/sekretaris-op/:id', sekretarisOpRoutes);
+
+app.use('/api/sub-bagian-hsdm-op/:id', subBagianHsdmOpRoutes);
+app.use('/api/sub-bagian-kul-op/:id', subBagianKulOpRoutes);
+app.use('/api/sub-bagian-pdi-op/:id', subBagianPdiOpRoutes);
+app.use('/api/sub-bagian-tppph-op/:id', subBagianTppphOpRoutes);
 
 // Use routes operator (read comment)
 app.use('/api/komentar-divisi-hp', divisiHpOpRoutes);
+app.use('/api/komentar-divisi-kurl', divisiKurlOpRoutes);
+app.use('/api/komentar-divisi-pdi', divisiPdiOpRoutes);
+app.use('/api/komentar-divisi-sppp_sdm', divisiSpppSdmOpRoutes);
+app.use('/api/komentar-divisi-tp', divisiTpOpRoutes);
+
+app.use('/api/komentar-sekretaris', sekretarisOpRoutes);
+
+app.use('/api/komentar-sb-hsdm', subBagianHsdmOpRoutes);
+app.use('/api/komentar-sb-kul', subBagianKulOpRoutes);
+app.use('/api/komentar-sb-pdi', subBagianPdiOpRoutes);
+app.use('/api/komentar-sb-tppph', subBagianTppphOpRoutes);
 
 // Use routes operator (delete comment)
 app.use('/api/komentar-divisi-hp', divisiHpOpRoutes);
+app.use('/api/komentar-divisi-kurl', divisiKurlOpRoutes);
+app.use('/api/komentar-divisi-pdi', divisiPdiOpRoutes);
+app.use('/api/komentar-divisi-sppp_sdm', divisiSpppSdmOpRoutes);
+app.use('/api/komentar-divisi-tp', divisiTpOpRoutes);
+
+app.use('/api/komentar-sekretaris', sekretarisOpRoutes);
+
+app.use('/api/komentar-sb-hsdm', subBagianHsdmOpRoutes);
+app.use('/api/komentar-sb-kul', subBagianKulOpRoutes);
+app.use('/api/komentar-sb-pdi', subBagianPdiOpRoutes);
+app.use('/api/komentar-sb-tppph', subBagianTppphOpRoutes);
+
 // ==================================== End Operator ====================================
 
 // Struktur Organisasi

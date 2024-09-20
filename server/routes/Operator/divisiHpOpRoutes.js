@@ -13,7 +13,7 @@ router.get('/', divisiHpOpController.getDivisiHpOp);
 router.put('/:id', upload.single('photo'), divisiHpOpController.updtDivisiHpOp);
 
 // Route untuk delete data anggota
-router.delete('/:id', divisiHpOpController.delDivisiHpOp);
+router.delete('/anggota/:id', divisiHpOpController.delDivisiHpOp);
 
 // Route untuk mengambil komentar berdasarkan ID divisi
 router.get('/:id', divisiHpOpController.getKomentarDivisiHpOp);
