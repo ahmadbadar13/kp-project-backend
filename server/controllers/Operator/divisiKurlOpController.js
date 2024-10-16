@@ -5,13 +5,31 @@ exports.addDivisiKurlOp = (req, res) => {
   const { name } = req.body;
   const photo = req.file ? `/uploads/${req.file.filename}` : null;
 
-  const query = 'INSERT INTO divisi_kurl (nama_div_kurl, foto_div_kurl, komentar_div_kurl) VALUES (?, ?, ?)';
-  db.query(query, [name, photo, ''], (err) => {
+  // Query untuk mengecek jumlah data di dalam tabel
+  const checkQuery = 'SELECT COUNT(*) AS total FROM divisi_kurl';
+  
+  db.query(checkQuery, (err, result) => {
     if (err) {
-      console.error('Error inserting data into divisi_kurl:', err.message);
+      console.error('Error checking data in divisi_kurl:', err.message);
       return res.status(500).json({ error: err.message });
     }
-    res.status(201).json({ success: true, message: 'User added successfully' });
+
+    const totalUsers = result[0].total;
+
+    // Jika sudah ada 1 data, kembalikan error
+    if (totalUsers >= 1) {
+      return res.status(400).json({ success: false, message: 'Maksimal hanya bisa menambahkan 1 data!' });
+    }    
+
+    // Jika belum ada data, lakukan penambahan
+    const insertQuery = 'INSERT INTO divisi_kurl (nama_div_kurl, foto_div_kurl, komentar_div_kurl) VALUES (?, ?, ?)';
+    db.query(insertQuery, [name, photo, ''], (err) => {
+      if (err) {
+        console.error('Error inserting data into divisi_kurl:', err.message);
+        return res.status(500).json({ error: err.message });
+      }
+      res.status(201).json({ success: true, message: 'User added successfully' });
+    });
   });
 };
 
