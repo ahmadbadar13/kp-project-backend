@@ -96,9 +96,15 @@ app.use('/api/tambah-komentar-sb-hsdm', subBagianHsdmAdmRoutes);
 app.use('/api/tambah-komentar-sb-kul', subBagianKulAdmRoutes);
 app.use('/api/tambah-komentar-sb-pdi', subBagianPdiAdmRoutes);
 app.use('/api/tambah-komentar-sb-tppph', subBagianTppphAdmRoutes);
+
+// Tambah range kinerja
+app.use('/api/tambah-kinerja', divisiHpAdmRoutes);
+
+// Tambah komentar kinerja
+app.use('/api/komentar-kinerja', divisiHpAdmRoutes);
 // ==================================== End Admin ====================================
 
-// ==================================== Start Admin ====================================
+// ==================================== Start Operator ====================================
 // Import routes operator
 
 const divisiHpOpRoutes = require('./routes/Operator/divisiHpOpRoutes');
