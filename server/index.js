@@ -101,7 +101,7 @@ app.use('/api/tambah-komentar-sb-tppph', subBagianTppphAdmRoutes);
 app.use('/api/tambah-kinerja', divisiHpAdmRoutes);
 
 // Tambah komentar kinerja
-app.use('/api/komentar-kinerja', divisiHpAdmRoutes);
+app.use('/api/komentar-kinerja/', divisiHpAdmRoutes);
 // ==================================== End Admin ====================================
 
 // ==================================== Start Operator ====================================
