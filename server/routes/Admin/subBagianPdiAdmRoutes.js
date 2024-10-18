@@ -4,5 +4,7 @@ const subBagianPdiAdmController = require('../../controllers/Admin/subBagianPdiA
 
 router.get('/', subBagianPdiAdmController.getSubBagianPdiAdm);
 router.post('/', subBagianPdiAdmController.addKomentarSubBagianPdiAdm);
+router.put('/:id', subBagianPdiAdmController.addRangeKinerjaSbPdiAdm);
+router.put('/kinerja-sb-pdi/:userId', subBagianPdiAdmController.addKomentarKinerjaSbPdiAdm);
 
 module.exports = router;

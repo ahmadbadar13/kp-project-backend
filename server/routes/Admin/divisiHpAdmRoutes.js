@@ -12,6 +12,6 @@ router.post('/', divisiHpAdmController.addKomentarDivisiHpAdm);
 router.put('/:id', divisiHpAdmController.addRangeKinerjaDivisiHpAdm);
 
 // Rute untuk menambah komentar kinerja divisi_hp
-router.put('/kinerja/:userId', divisiHpAdmController.addKomentarKinerjaDivisiHpAdm);
+router.put('/kinerja-div-hp/:userId', divisiHpAdmController.addKomentarKinerjaDivisiHpAdm);
 
 module.exports = router;

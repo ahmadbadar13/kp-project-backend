@@ -4,5 +4,7 @@ const divisiTpAdmController = require('../../controllers/Admin/divisiTpAdmContro
 
 router.get('/', divisiTpAdmController.getDivisiTpAdm);
 router.post('/', divisiTpAdmController.addKomentarDivisiTpAdm);
+router.put('/:id', divisiTpAdmController.addRangeKinerjaDivisiTpAdm);
+router.put('/kinerja-div-tp/:userId', divisiTpAdmController.addKomentarKinerjaDivisiTpAdm);
 
 module.exports = router;

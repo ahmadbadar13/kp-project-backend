@@ -33,7 +33,7 @@ exports.addKomentarDivisiHpAdm = (req, res) => {
     });
 };
 
-// Tambah range kinerja divisi_hp admin
+// Tambah range kinerja Divisi HP
 exports.addRangeKinerjaDivisiHpAdm = (req, res) => {
     const { id } = req.params;
     const { kinerja_div_hp } = req.body;
@@ -83,5 +83,3 @@ exports.addKomentarKinerjaDivisiHpAdm = (req, res) => {
         res.status(200).json({ message: 'Performance comment added successfully' });
     });
 };
-
-

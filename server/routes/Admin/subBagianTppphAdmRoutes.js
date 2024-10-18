@@ -4,5 +4,7 @@ const subBagianTppphAdmController = require('../../controllers/Admin/subBagianTp
 
 router.get('/', subBagianTppphAdmController.getSubBagianTppphAdm);
 router.post('/', subBagianTppphAdmController.addKomentarSubBagianTppphAdm);
+router.put('/:id', subBagianTppphAdmController.addRangeKinerjaSbTppphAdm);
+router.put('/kinerja-sb-tppph/:userId', subBagianTppphAdmController.addKomentarKinerjaSbTppphAdm);
 
 module.exports = router;

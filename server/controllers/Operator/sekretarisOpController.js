@@ -1,22 +1,34 @@
 const db = require('../../config/db');
 
-//Create Data Sekretaris Operator
 exports.addSekretarisOp = (req, res) => {
   const { name, nip } = req.body;
   const photo = req.file ? `/uploads/${req.file.filename}` : null;
 
-  if (!name || !nip) {
-    return res.status(400).json({ error: 'Nama dan NIP diperlukan' });
-  }
+  // Query untuk mengecek jumlah data di dalam tabel
+  const checkQuery = 'SELECT COUNT(*) AS total FROM sekretaris';
 
-  const query = 'INSERT INTO sekretaris (nama_sekretaris, nip_sekretaris, foto_sekretaris, komentar_sekretaris) VALUES (?, ?, ?, ?)';
-
-  db.query(query, [name, nip, photo, ''], (err, results) => {
+  db.query(checkQuery, (err, result) => {
     if (err) {
-      console.error('Error inserting data into sekretaris:', err.message);
+      console.error('Error checking data in sekretaris:', err.message);
       return res.status(500).json({ error: err.message });
     }
-    res.status(201).json({ success: true, message: 'User added successfully' });
+
+    const totalUsers = result[0].total;
+
+    // Jika sudah ada 1 data, kembalikan error
+    if (totalUsers >= 1) {
+      return res.status(400).json({ success: false, message: 'Maksimal hanya bisa menambahkan 1 data!' });
+    }    
+
+    // Jika belum ada data, lakukan penambahan
+    const insertQuery = 'INSERT INTO sekretaris (nama_sekretaris, nip_sekretaris, foto_sekretaris, komentar_sekretaris) VALUES (?, ?, ?, ?)';
+    db.query(insertQuery, [name, nip, photo, ''], (err) => {
+      if (err) {
+        console.error('Error inserting data into sekretaris:', err.message);
+        return res.status(500).json({ error: err.message });
+      }
+      res.status(201).json({ success: true, message: 'User added successfully' });
+    });
   });
 };
 
