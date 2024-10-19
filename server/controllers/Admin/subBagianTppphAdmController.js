@@ -69,7 +69,7 @@ exports.addKomentarKinerjaSbTppphAdm = (req, res) => {
         return res.status(400).json({ error: 'Kinerja value must be greater than 0' });
     }
 
-    const query = 'UPDATE sub_bagian_tppph SET komentar_sb_tppph = ?, kinerja_sb_tppph = ? WHERE id = ?';
+    const query = 'UPDATE sub_bagian_tppph SET komkin_sb_tppph = ?, kinerja_sb_tppph = ? WHERE id = ?';
     db.query(query, [performanceComment, kinerja_sb_tppph, userId], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);

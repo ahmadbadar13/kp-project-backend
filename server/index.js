@@ -112,18 +112,18 @@ app.use('/api/tambah-kinerja-sb-pdi', subBagianPdiAdmRoutes);
 app.use('/api/tambah-kinerja-sb-tppph', subBagianTppphAdmRoutes);
 
 // Tambah komentar kinerja
-app.use('/api/komentar-kinerja/', divisiHpAdmRoutes);
-app.use('/api/komentar-kinerja/', divisiKurlAdmRoutes);
-app.use('/api/komentar-kinerja/', divisiPdiAdmRoutes);
-app.use('/api/komentar-kinerja/', divisiSpppSdmAdmRoutes);
-app.use('/api/komentar-kinerja/', divisiTpAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-div-hp', divisiHpAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-div-kurl', divisiKurlAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-div-pdi', divisiPdiAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-div-sppp_sdm', divisiSpppSdmAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-div-tp', divisiTpAdmRoutes);
 
-app.use('/api/tambah-kinerja-sekretaris', sekretarisAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-sekretaris', sekretarisAdmRoutes);
 
-app.use('/api/komentar-kinerja/', subBagianHsdmAdmRoutes);
-app.use('/api/komentar-kinerja/', subBagianKulAdmRoutes);
-app.use('/api/komentar-kinerja/', subBagianPdiAdmRoutes);
-app.use('/api/komentar-kinerja/', subBagianTppphAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-sb-hsdm', subBagianHsdmAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-sb-kul', subBagianKulAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-sb-pdi', subBagianPdiAdmRoutes);
+app.use('/api/komentar-kinerja/kinerja-sb-tppph', subBagianTppphAdmRoutes);
 // ==================================== End Admin ====================================
 
 // ==================================== Start Operator ====================================
