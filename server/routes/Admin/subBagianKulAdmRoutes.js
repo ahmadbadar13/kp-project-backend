@@ -4,7 +4,5 @@ const subBagianKulAdmController = require('../../controllers/Admin/subBagianKulA
 
 router.get('/', subBagianKulAdmController.getSubBagianKulAdm);
 router.post('/', subBagianKulAdmController.addKomentarSubBagianKulAdm);
-router.put('/:id', subBagianKulAdmController.addRangeKinerjaSbKulAdm);
-router.put('/kinerja-sb-kul/:userId', subBagianKulAdmController.addKomentarKinerjaSbKulAdm);
 
 module.exports = router;

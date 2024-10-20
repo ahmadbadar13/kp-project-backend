@@ -69,6 +69,9 @@ const subBagianKulAdmRoutes = require('./routes/Admin/subBagianKulAdmRoutes');
 const subBagianPdiAdmRoutes = require('./routes/Admin/subBagianPdiAdmRoutes');
 const subBagianTppphAdmRoutes = require('./routes/Admin/subBagianTppphAdmRoutes');
 
+const addNewsRoutes = require('./routes/Admin/newsRoutes');
+const getNewsRoutes = require('./routes/Admin/newsRoutes');
+
 // Use routes admin (read data)
 app.use('/api/divisi-hp-adm', divisiHpAdmRoutes);
 app.use('/api/divisi-kurl-adm', divisiKurlAdmRoutes);
@@ -97,33 +100,8 @@ app.use('/api/tambah-komentar-sb-kul', subBagianKulAdmRoutes);
 app.use('/api/tambah-komentar-sb-pdi', subBagianPdiAdmRoutes);
 app.use('/api/tambah-komentar-sb-tppph', subBagianTppphAdmRoutes);
 
-// Tambah range kinerja
-app.use('/api/tambah-kinerja-div-hp', divisiHpAdmRoutes);
-app.use('/api/tambah-kinerja-div-kurl', divisiKurlAdmRoutes);
-app.use('/api/tambah-kinerja-div-pdi', divisiPdiAdmRoutes);
-app.use('/api/tambah-kinerja-div-sppp_sdm', divisiSpppSdmAdmRoutes);
-app.use('/api/tambah-kinerja-div-tp', divisiTpAdmRoutes);
-
-app.use('/api/tambah-kinerja-sekretaris', sekretarisAdmRoutes);
-
-app.use('/api/tambah-kinerja-sb-hsdm', subBagianHsdmAdmRoutes);
-app.use('/api/tambah-kinerja-sb-kul', subBagianKulAdmRoutes);
-app.use('/api/tambah-kinerja-sb-pdi', subBagianPdiAdmRoutes);
-app.use('/api/tambah-kinerja-sb-tppph', subBagianTppphAdmRoutes);
-
-// Tambah komentar kinerja
-app.use('/api/komentar-kinerja/kinerja-div-hp', divisiHpAdmRoutes);
-app.use('/api/komentar-kinerja/kinerja-div-kurl', divisiKurlAdmRoutes);
-app.use('/api/komentar-kinerja/kinerja-div-pdi', divisiPdiAdmRoutes);
-app.use('/api/komentar-kinerja/kinerja-div-sppp_sdm', divisiSpppSdmAdmRoutes);
-app.use('/api/komentar-kinerja/kinerja-div-tp', divisiTpAdmRoutes);
-
-app.use('/api/komentar-kinerja/kinerja-sekretaris', sekretarisAdmRoutes);
-
-app.use('/api/komentar-kinerja/kinerja-sb-hsdm', subBagianHsdmAdmRoutes);
-app.use('/api/komentar-kinerja/kinerja-sb-kul', subBagianKulAdmRoutes);
-app.use('/api/komentar-kinerja/kinerja-sb-pdi', subBagianPdiAdmRoutes);
-app.use('/api/komentar-kinerja/kinerja-sb-tppph', subBagianTppphAdmRoutes);
+app.use('/news', addNewsRoutes);
+app.use('/news', getNewsRoutes);
 // ==================================== End Admin ====================================
 
 // ==================================== Start Operator ====================================
