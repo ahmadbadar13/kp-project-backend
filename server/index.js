@@ -71,6 +71,8 @@ const subBagianTppphAdmRoutes = require('./routes/Admin/subBagianTppphAdmRoutes'
 
 const addNewsRoutes = require('./routes/Admin/newsRoutes');
 const getNewsRoutes = require('./routes/Admin/newsRoutes');
+const editNewsRoutes = require('./routes/Admin/newsRoutes');
+const deleteNewsRoutes = require('./routes/Admin/newsRoutes');
 
 // Use routes admin (read data)
 app.use('/api/divisi-hp-adm', divisiHpAdmRoutes);
@@ -102,6 +104,8 @@ app.use('/api/tambah-komentar-sb-tppph', subBagianTppphAdmRoutes);
 
 app.use('/news', addNewsRoutes);
 app.use('/news', getNewsRoutes);
+app.use('/news', editNewsRoutes);
+app.use('/news', deleteNewsRoutes);
 // ==================================== End Admin ====================================
 
 // ==================================== Start Operator ====================================

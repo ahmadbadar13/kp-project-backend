@@ -5,5 +5,7 @@ const { upload } = require('../../index');
 
 router.post('/add', upload.single('image'), newsController.addNews);
 router.get('/list', newsController.getNews);
+router.put('/edit/:id', upload.single('image'), newsController.editNews);
+router.delete('/delete/:id', newsController.deleteNews);
 
 module.exports = router;
