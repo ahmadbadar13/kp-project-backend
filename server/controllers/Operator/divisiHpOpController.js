@@ -119,3 +119,49 @@ exports.delKomentarDivisiHpOp = (req, res) => {
     res.json({ message: 'Komentar berhasil dihapus' });
   });
 }
+
+// Mengirim data divisi HP ke tabel periode_divisi
+exports.addPeriodeDivisiHp = (req, res) => {
+  const { id_divisi_hp, periode_awal, periode_akhir } = req.body;
+
+  // Validasi input
+  if (!id_divisi_hp || !periode_awal || !periode_akhir) {
+    return res.status(400).json({ success: false, message: 'Semua field harus diisi' });
+  }
+
+  // Query untuk memasukkan data divisi HP ke dalam tabel periode_divisi
+  const insertQuery = `
+    INSERT INTO periode_divisi (id_divisi_hp, periode_awal, periode_akhir)
+    VALUES (?, ?, ?)
+  `;
+  
+  db.query(insertQuery, [id_divisi_hp, periode_awal, periode_akhir], (err) => {
+    if (err) {
+      console.error('Error inserting data into periode_divisi:', err.message);
+      return res.status(500).json({ error: err.message });
+    }
+    res.status(201).json({ success: true, message: 'Periode divisi HP berhasil ditambahkan' });
+  });
+};
+
+// Get semua data dari tabel periode_divisi
+exports.getPeriodeDivisi = (req, res) => {
+  const query = `
+    SELECT pd.id AS id_periode, 
+          pd.id_divisi_hp,
+          pd.periode_awal, 
+          pd.periode_akhir,
+          dh.nama_div_hp
+    FROM periode_divisi pd
+    LEFT JOIN divisi_hp dh ON pd.id_divisi_hp = dh.id
+`;
+
+
+db.query(query, (error, results) => {
+  if (error) {
+      return res.status(500).json({ message: 'Internal Server Error', error });
+  }
+    console.log('Hasil Query:', results);
+    res.status(200).json(results);
+  });
+};

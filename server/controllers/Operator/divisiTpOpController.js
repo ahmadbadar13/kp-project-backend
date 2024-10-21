@@ -119,3 +119,27 @@ exports.delKomentarDivisiTpOp = (req, res) => {
     res.json({ message: 'Komentar berhasil dihapus' });
   });
 }
+
+// Mengirim data divisi TP ke tabel periode_divisi
+exports.addPeriodeDivisiTp = (req, res) => {
+  const { id_divisi_tp, periode_awal, periode_akhir } = req.body;
+
+  // Validasi input
+  if (!id_divisi_tp || !periode_awal || !periode_akhir) {
+    return res.status(400).json({ success: false, message: 'Semua field harus diisi' });
+  }
+
+  // Query untuk memasukkan data divisi TP ke dalam tabel periode_divisi
+  const insertQuery = `
+    INSERT INTO periode_divisi (id_divisi_tp, periode_awal, periode_akhir)
+    VALUES (?, ?, ?)
+  `;
+  
+  db.query(insertQuery, [id_divisi_tp, periode_awal, periode_akhir], (err) => {
+    if (err) {
+      console.error('Error inserting data into periode_divisi:', err.message);
+      return res.status(500).json({ error: err.message });
+    }
+    res.status(201).json({ success: true, message: 'Periode divisi TP berhasil ditambahkan' });
+  });
+};

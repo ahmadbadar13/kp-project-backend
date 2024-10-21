@@ -124,6 +124,8 @@ const subBagianKulOpRoutes = require('./routes/Operator/subBagianKulOpRoutes');
 const subBagianPdiOpRoutes = require('./routes/Operator/subBagianPdiOpRoutes');
 const subBagianTppphOpRoutes = require('./routes/Operator/subBagianTppphOpRoutes');
 
+const periodeHpRoutes = require('./routes/Operator/divisiHpOpRoutes');
+
 // Use routes operator (create data)
 app.use('/api/divisi-hp-op', divisiHpOpRoutes);
 app.use('/api/divisi-kurl-op', divisiKurlOpRoutes);
@@ -208,6 +210,15 @@ app.use('/api/komentar-sb-kul', subBagianKulOpRoutes);
 app.use('/api/komentar-sb-pdi', subBagianPdiOpRoutes);
 app.use('/api/komentar-sb-tppph', subBagianTppphOpRoutes);
 
+// periode
+app.use('/api/divisi-hp', divisiHpOpRoutes);
+app.use('/api/divisi-kurl', divisiKurlOpRoutes);
+app.use('/api/divisi-pdi', divisiPdiOpRoutes);
+app.use('/api/divisi-sppp_sdm', divisiSpppSdmOpRoutes);
+app.use('/api/divisi-tp', divisiTpOpRoutes);
+
+app.use('/api/divisi-hp', periodeHpRoutes);
+app.use('/api/periode-divisi', periodeHpRoutes);
 // ==================================== End Operator ====================================
 
 // Struktur Organisasi
