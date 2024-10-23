@@ -21,8 +21,4 @@ router.get('/:id', divisiHpOpController.getKomentarDivisiHpOp);
 // Route untuk menghapus komentar berdasarkan ID divisi
 router.delete('/:id', divisiHpOpController.delKomentarDivisiHpOp);
 
-router.post('/add-periode', divisiHpOpController.addPeriodeDivisiHp);
-
-router.get('/', divisiHpOpController.getPeriodeDivisi);
-
 module.exports = router;
