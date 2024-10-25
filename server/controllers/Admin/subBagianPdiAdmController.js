@@ -1,4 +1,4 @@
-const SubBagianPdi = require('../../models/Admin/subBagianPdiModel');
+const SubBagianPdi = require('../../models/Admin/subBagianPdiAdmModel');
 
 class SubBagianPdiController {
     static getSubBagianPdiAdm(req, res) {

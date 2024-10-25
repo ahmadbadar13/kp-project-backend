@@ -1,124 +1,122 @@
-const db = require('../../config/db');
+const sekretarisModel = require('../../models/Operator/sekretarisOpModel');
 
-exports.addSekretarisOp = (req, res) => {
-  const { name, nip } = req.body;
-  const photo = req.file ? `/uploads/${req.file.filename}` : null;
+class SekretarisOpController {
+    // Menambahkan Sekretaris
+    static addSekretarisOp(req, res) {
+        const { name, nip } = req.body;
+        const photo = req.file ? `/uploads/${req.file.filename}` : null;
 
-  // Query untuk mengecek jumlah data di dalam tabel
-  const checkQuery = 'SELECT COUNT(*) AS total FROM sekretaris';
+        sekretarisModel.checkSekretarisCount((err, result) => {
+            if (err) {
+                console.error('Error checking data in sekretaris:', err.message);
+                return res.status(500).json({ error: err.message });
+            }
 
-  db.query(checkQuery, (err, result) => {
-    if (err) {
-      console.error('Error checking data in sekretaris:', err.message);
-      return res.status(500).json({ error: err.message });
+            if (result[0].total >= 1) {
+                return res.status(400).json({ success: false, message: 'Maksimal hanya bisa menambahkan 1 data!' });
+            }
+
+            sekretarisModel.insertSekretaris(name, nip, photo, (err) => {
+                if (err) {
+                    console.error('Error inserting data into sekretaris:', err.message);
+                    return res.status(500).json({ error: err.message });
+                }
+                res.status(201).json({ success: true, message: 'User added successfully' });
+            });
+        });
     }
 
-    const totalUsers = result[0].total;
-
-    // Jika sudah ada 1 data, kembalikan error
-    if (totalUsers >= 1) {
-      return res.status(400).json({ success: false, message: 'Maksimal hanya bisa menambahkan 1 data!' });
-    }    
-
-    // Jika belum ada data, lakukan penambahan
-    const insertQuery = 'INSERT INTO sekretaris (nama_sekretaris, nip_sekretaris, foto_sekretaris, komentar_sekretaris) VALUES (?, ?, ?, ?)';
-    db.query(insertQuery, [name, nip, photo, ''], (err) => {
-      if (err) {
-        console.error('Error inserting data into sekretaris:', err.message);
-        return res.status(500).json({ error: err.message });
-      }
-      res.status(201).json({ success: true, message: 'User added successfully' });
-    });
-  });
-};
-
-//Read Data Sekretaris Operator
-exports.getSekretarisOp = (req, res) => {
-  const query = 'SELECT * FROM sekretaris';
-  db.query(query, (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(200).json(results);
-  });
-}
-
-//Update Data  Sekretaris Operator
-exports.updtSekretarisOp = (req, res) => {
-  const { id } = req.params;
-  const { name, nip } = req.body;
-  const photo = req.file ? `/uploads/${req.file.filename}` : null;
-
-  // Query untuk mendapatkan data anggota yang ada
-  const getUserQuery = 'SELECT * FROM sekretaris WHERE id = ?';
-  db.query(getUserQuery, [id], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (results.length === 0) return res.status(404).json({ error: 'User not found' });
-
-    // Data yang akan diperbarui
-    const updatedName = name || results[0].nama_sekretaris;
-    const updatedNip = nip || results[0].nip_sekretaris;
-    const updatedPhoto = photo || results[0].foto_sekretaris;
-
-    // Query untuk memperbarui data anggota
-    const updateUserQuery = 'UPDATE sekretaris SET nama_sekretaris = ?, nip_sekretaris = ?, foto_sekretaris = ? WHERE id = ?';
-    db.query(updateUserQuery, [updatedName, updatedNip, updatedPhoto, id], (err) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.status(200).json({ success: true, message: 'User updated successfully' });
-    });
-  });
-}
-
-//Delete Sekretaris Operator
-exports.delSekretarisOp = (req, res) => {
-  const { id } = req.params;
-  const query = 'DELETE FROM sekretaris WHERE id = ?';
-  db.query(query, [id], (err) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(200).json({ success: true, message: 'User deleted successfully' });
-  });
-}
-
-//Read Komentar  Sekretaris Operator
-exports.getKomentarSekretarisOp = (req, res) => {
-  const id = req.params.id;
-
-  // Validasi ID
-  if (!Number.isInteger(parseInt(id))) {
-    return res.status(400).json({ error: 'Invalid ID format' });
-  }
-
-  const query = 'SELECT komentar_sekretaris FROM sekretaris WHERE id = ?';
-
-  db.query(query, [id], (err, result) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error' });
+    // Mendapatkan semua Sekretaris
+    static getSekretarisOp(req, res) {
+        sekretarisModel.getAllSekretaris((err, results) => {
+            if (err) {
+                console.error('Error fetching data:', err.message);
+                return res.status(500).json({ error: err.message });
+            }
+            res.status(200).json(results);
+        });
     }
-    if (result.length === 0) {
-      return res.status(404).json({ error: 'Data not found' });
+
+    // Memperbarui Sekretaris
+    static updtSekretarisOp(req, res) {
+        const { id } = req.params;
+        const { name, nip } = req.body;
+        const photo = req.file ? `/uploads/${req.file.filename}` : null;
+
+        sekretarisModel.getSekretarisById(id, (err, results) => {
+            if (err) {
+                console.error('Error fetching user:', err.message);
+                return res.status(500).json({ error: err.message });
+            }
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const updatedName = name || results[0].nama_sekretaris;
+            const updatedNip = nip || results[0].nip_sekretaris;
+            const updatedPhoto = photo || results[0].foto_sekretaris;
+
+            sekretarisModel.updateSekretaris(id, updatedName, updatedNip, updatedPhoto, (err) => {
+                if (err) {
+                    console.error('Error updating user:', err.message);
+                    return res.status(500).json({ error: err.message });
+                }
+                res.status(200).json({ success: true, message: 'User updated successfully' });
+            });
+        });
     }
-    res.json({ komentar: result[0].komentar_sekretaris });
-  });
+
+    // Menghapus Sekretaris
+    static delSekretarisOp(req, res) {
+        const { id } = req.params;
+        sekretarisModel.deleteSekretaris(id, (err) => {
+            if (err) {
+                console.error('Error deleting user:', err.message);
+                return res.status(500).json({ error: err.message });
+            }
+            res.status(200).json({ success: true, message: 'User deleted successfully' });
+        });
+    }
+
+    // Mendapatkan Komentar Sekretaris
+    static getKomentarSekretarisOp(req, res) {
+        const id = req.params.id;
+
+        if (!Number.isInteger(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+
+        sekretarisModel.getKomentarSekretaris(id, (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+            if (result.length === 0) {
+                return res.status(404).json({ error: 'Data not found' });
+            }
+            res.json({ komentar: result[0].komentar_sekretaris });
+        });
+    }
+
+    // Menghapus Komentar Sekretaris
+    static delKomentarSekretarisOp(req, res) {
+        const id = req.params.id;
+
+        if (!Number.isInteger(parseInt(id))) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+
+        sekretarisModel.deleteKomentarSekretaris(id, (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'Data not found' });
+            }
+            res.json({ message: 'Komentar berhasil dihapus' });
+        });
+    }
 }
 
-//Delete Komentar Sekretaris
-exports.delKomentarSekretarisOp = (req, res) => {
-  const id = req.params.id;
-
-  // Validasi ID
-  if (!Number.isInteger(parseInt(id))) {
-    return res.status(400).json({ error: 'Invalid ID format' });
-  }
-
-  const query = 'UPDATE sekretaris SET komentar_sekretaris = NULL WHERE id = ?';
-
-  db.query(query, [id], (err, result) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error' });
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Data not found' });
-    }
-    res.json({ message: 'Komentar berhasil dihapus' });
-  });
-}
+module.exports = SekretarisOpController;

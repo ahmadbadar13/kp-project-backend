@@ -1,4 +1,4 @@
-const Sekretaris = require('../../models/Admin/sekretarisModel');
+const Sekretaris = require('../../models/Admin/sekretarisAdmModel');
 
 class SekretarisController {
     static getSekretarisAdm(req, res) {

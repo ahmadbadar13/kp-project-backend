@@ -1,4 +1,4 @@
-const SubBagianTppph = require('../../models/Admin/subBagianTppphModel');
+const SubBagianTppph = require('../../models/Admin/subBagianTppphAdmModel');
 
 class SubBagianTppphController {
     static getSubBagianTppphAdm(req, res) {

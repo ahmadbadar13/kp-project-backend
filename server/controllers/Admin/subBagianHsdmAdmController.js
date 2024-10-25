@@ -1,4 +1,4 @@
-const SubBagianHsdm = require('../../models/Admin/subBagianHsdmModel');
+const SubBagianHsdm = require('../../models/Admin/subBagianHsdmAdmModel');
 
 class SubBagianHsdmController {
     static getSubBagianHsdmAdm(req, res) {

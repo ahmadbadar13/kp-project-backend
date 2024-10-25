@@ -1,6 +1,6 @@
 const db = require('../../config/db');
 
-class Sekretaris {
+class SekretarisAdm {
     static getAllSekretaris(callback) {
         const query = 'SELECT * FROM sekretaris';
         db.query(query, (err, results) => {
@@ -22,4 +22,4 @@ class Sekretaris {
     }
 }
 
-module.exports = Sekretaris;
+module.exports = SekretarisAdm;

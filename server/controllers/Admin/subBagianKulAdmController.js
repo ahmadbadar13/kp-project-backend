@@ -1,4 +1,4 @@
-const SubBagianKul = require('../../models/Admin/subBagianKulModel');
+const SubBagianKul = require('../../models/Admin/subBagianKulAdmModel');
 
 class SubBagianKulController {
     static getSubBagianKulAdm(req, res) {
