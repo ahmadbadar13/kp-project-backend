@@ -1,68 +1,45 @@
-const db = require('../../config/db');
-const path = require('path');
+const News = require('../../models/Admin/newsModel');
 
-// Fungsi untuk menambah berita ke database
-exports.addNews = (req, res) => {
-    const { title, date, content } = req.body;
-    const image = req.file ? req.file.filename : null;
+class NewsController {
+    static addNews(req, res) {
+        const { title, date, content } = req.body;
+        const image = req.file ? req.file.filename : null;
 
-    if (!title || !date || !content || !image) {
+        if (!title || !date || !content || !image) {
         return res.status(400).json({ message: 'Semua field wajib diisi!' });
-    }
+        }
 
-    // Query untuk menambahkan berita ke database
-    const query = 'INSERT INTO news (title, date, content, image) VALUES (?, ?, ?, ?)';
-    const imagePath = `/uploads/${image}`;
-
-    db.query(query, [title, date, content, imagePath], (err, results) => {
+        News.addNews(title, date, content, image, (err, results) => {
         if (err) {
-            console.error('Error executing query:', err);
+            console.error('Error adding news:', err);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-        res.status(201).json({ message: 'Berita berhasil ditambahkan!', news: { title, date, content, image: imagePath } });
-    });
-};
+        res.status(201).json({ message: 'Berita berhasil ditambahkan!', news: { title, date, content, image: `/uploads/${image}` } });
+        });
+    }
 
-// Fungsi untuk mengambil semua berita
-exports.getNews = (req, res) => {
-    const query = 'SELECT * FROM news';
-
-    db.query(query, (err, results) => {
+    static getNews(req, res) {
+        News.getAllNews((err, results) => {
         if (err) {
             console.error('Error fetching news:', err);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-
         res.status(200).json(results);
-    });
-};
+        });
+    }
 
-// Fungsi untuk mengedit berita
-exports.editNews = (req, res) => {
-    const { id } = req.params; 
-    const { title, date, content } = req.body;
-    const image = req.file ? req.file.filename : null;
+    static editNews(req, res) {
+        const { id } = req.params;
+        const { title, date, content } = req.body;
+        const image = req.file ? req.file.filename : null;
 
-    if (!title || !date || !content) {
+        if (!title || !date || !content) {
         return res.status(400).json({ message: 'Semua field wajib diisi kecuali gambar!' });
-    }
+        }
 
-    // Query untuk memperbarui berita di database
-    let query = 'UPDATE news SET title = ?, date = ?, content = ?';
-    const params = [title, date, content];
-
-    if (image) {
-        query += ', image = ?';
-        const imagePath = `/uploads/${image}`;
-        params.push(imagePath);
-    }
-
-    query += ' WHERE id = ?';
-    params.push(id);
-
-    db.query(query, params, (err, results) => {
+        News.updateNews(id, title, date, content, image, (err, results) => {
         if (err) {
-            console.error('Error executing query:', err);
+            console.error('Error updating news:', err);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
 
@@ -71,19 +48,15 @@ exports.editNews = (req, res) => {
         }
 
         res.status(200).json({ message: 'Berita berhasil diperbarui!' });
-    });
-};
+        });
+    }
 
-// Fungsi untuk menghapus berita
-exports.deleteNews = (req, res) => {
-    const { id } = req.params; // Ambil ID berita dari parameter URL
+    static deleteNews(req, res) {
+        const { id } = req.params;
 
-    // Query untuk menghapus berita dari database
-    const query = 'DELETE FROM news WHERE id = ?';
-
-    db.query(query, [id], (err, results) => {
+        News.deleteNews(id, (err, results) => {
         if (err) {
-            console.error('Error executing query:', err);
+            console.error('Error deleting news:', err);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
 
@@ -92,5 +65,8 @@ exports.deleteNews = (req, res) => {
         }
 
         res.status(200).json({ message: 'Berita berhasil dihapus!' });
-    });
-};
+        });
+    }
+}
+
+module.exports = NewsController;
