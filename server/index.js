@@ -126,8 +126,6 @@ const subBagianKulOpRoutes = require('./routes/Operator/subBagianKulOpRoutes');
 const subBagianPdiOpRoutes = require('./routes/Operator/subBagianPdiOpRoutes');
 const subBagianTppphOpRoutes = require('./routes/Operator/subBagianTppphOpRoutes');
 
-const periodeHpRoutes = require('./routes/Operator/divisiHpOpRoutes');
-
 // Use routes operator (create data)
 app.use('/api/divisi-hp-op', divisiHpOpRoutes);
 app.use('/api/divisi-kurl-op', divisiKurlOpRoutes);
