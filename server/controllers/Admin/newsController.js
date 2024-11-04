@@ -67,6 +67,20 @@ class NewsController {
         res.status(200).json({ message: 'Berita berhasil dihapus!' });
         });
     }
+
+    static async getNewsById(req, res) {
+        try {
+            const id = req.params.id;
+            const article = await News.getNewsById(id);
+            if (article) {
+                res.json(article);
+            } else {
+                res.status(404).json({ message: 'Article not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching article', error });
+        }
+    }
 }
 
 module.exports = NewsController;

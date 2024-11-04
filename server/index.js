@@ -73,6 +73,7 @@ const addNewsRoutes = require('./routes/Admin/newsRoutes');
 const getNewsRoutes = require('./routes/Admin/newsRoutes');
 const editNewsRoutes = require('./routes/Admin/newsRoutes');
 const deleteNewsRoutes = require('./routes/Admin/newsRoutes');
+const newsReadMore = require('../server/routes/Admin/newsRoutes');
 
 // Use routes admin (read data)
 app.use('/api/divisi-hp-adm', divisiHpAdmRoutes);
@@ -106,6 +107,7 @@ app.use('/news', addNewsRoutes);
 app.use('/news', getNewsRoutes);
 app.use('/news', editNewsRoutes);
 app.use('/news', deleteNewsRoutes);
+app.use('/news', newsReadMore);
 // ==================================== End Admin ====================================
 
 // ==================================== Start Operator ====================================
@@ -209,16 +211,6 @@ app.use('/api/komentar-sb-hsdm', subBagianHsdmOpRoutes);
 app.use('/api/komentar-sb-kul', subBagianKulOpRoutes);
 app.use('/api/komentar-sb-pdi', subBagianPdiOpRoutes);
 app.use('/api/komentar-sb-tppph', subBagianTppphOpRoutes);
-
-// periode
-app.use('/api/divisi-hp', divisiHpOpRoutes);
-app.use('/api/divisi-kurl', divisiKurlOpRoutes);
-app.use('/api/divisi-pdi', divisiPdiOpRoutes);
-app.use('/api/divisi-sppp_sdm', divisiSpppSdmOpRoutes);
-app.use('/api/divisi-tp', divisiTpOpRoutes);
-
-app.use('/api/divisi-hp', periodeHpRoutes);
-app.use('/api/periode-divisi', periodeHpRoutes);
 // ==================================== End Operator ====================================
 
 // Struktur Organisasi

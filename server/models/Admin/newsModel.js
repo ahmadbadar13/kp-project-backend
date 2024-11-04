@@ -52,6 +52,15 @@ class News {
         callback(null, results);
         });
     }
+
+    static getNewsById(id) {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT * FROM news WHERE id = ?', [id], (err, results) => {
+                if (err) reject(err);
+                resolve(results[0]);
+            });
+        });
+    }
 }
 
 module.exports = News;
