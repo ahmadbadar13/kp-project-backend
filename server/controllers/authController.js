@@ -46,6 +46,47 @@ class AuthController {
         res.status(500).json({ success: false, message: 'Terjadi kesalahan saat registrasi' });
         }
     }
+
+    // Controller untuk mengambil semua pengguna
+    static getAllUsers(req, res) {
+        User.findAll((err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error fetching users', details: err });
+            }
+            res.status(200).json(results);
+        });
+    }
+
+    // Controller untuk memperbarui pengguna
+    static updateUser(req, res) {
+        const { id } = req.params;
+        const { email, role } = req.body;
+
+        User.update(id, email, role, (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error updating user', details: err });
+            }
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.status(200).json({ message: 'User updated successfully' });
+        });
+    }
+
+    // Controller untuk menghapus pengguna
+    static deleteUser(req, res) {
+        const { id } = req.params;
+
+        User.delete(id, (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error deleting user', details: err });
+            }
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.status(200).json({ message: 'User deleted successfully' });
+        });
+    }
 }
 
 module.exports = AuthController;

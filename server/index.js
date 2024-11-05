@@ -53,6 +53,9 @@ const authRoutes = require('./routes/authRoutes');
 // Use routes login dan register
 app.use('/login', authRoutes);
 app.use('/register', authRoutes);
+app.use('/users', authRoutes);
+app.use('/users', authRoutes);
+app.use('/users', authRoutes);
 
 // ==================================== Start Admin ====================================
 // Import routes admin
