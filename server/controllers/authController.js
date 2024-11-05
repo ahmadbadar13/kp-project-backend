@@ -58,18 +58,36 @@ class AuthController {
     }
 
     // Controller untuk memperbarui pengguna
-    static updateUser(req, res) {
+    static async updateUser(req, res) {
         const { id } = req.params;
-        const { email, role } = req.body;
+        const { email, role, password } = req.body; // Menambahkan password di sini
 
-        User.update(id, email, role, (err, result) => {
+        // Memastikan pengguna ada sebelum memperbarui
+        User.getUserById(id, async (err, results) => {
             if (err) {
-                return res.status(500).json({ error: 'Error updating user', details: err });
+                return res.status(500).json({ error: err.message });
             }
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ message: 'User not found' });
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
             }
-            res.status(200).json({ message: 'User updated successfully' });
+
+            try {
+                // Jika password diberikan, hash password baru
+                let hashedPassword = null;
+                if (password) {
+                    hashedPassword = await bcrypt.hash(password, 10);
+                }
+
+                // Memperbarui pengguna dengan data baru
+                User.update(id, email, role, hashedPassword, (err) => {
+                    if (err) {
+                        return res.status(500).json({ error: 'Error updating user', details: err });
+                    }
+                    res.status(200).json({ success: true, message: 'User updated successfully', updatedAccount: results });
+                });
+            } catch (error) {
+                res.status(500).json({ error: 'Error hashing password', details: error });
+            }
         });
     }
 
