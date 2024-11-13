@@ -1,21 +1,21 @@
-const StrukturOrganisasi = require('../models/strukturOrganisasiModel');
+const StrukturOrganisasiModel = require('../models/strukturOrganisasiModel');
 
-class StrukturOrganisasiController {
-    static async getStrukturOrganisasi(req, res) {
-        try {
-            const results = await Promise.all([
-                new Promise((resolve, reject) => StrukturOrganisasi.getKetua((err, result) => (err ? reject(err) : resolve(result)))),
-                new Promise((resolve, reject) => StrukturOrganisasi.getAnggotaDivisi((err, result) => (err ? reject(err) : resolve(result)))),
-                new Promise((resolve, reject) => StrukturOrganisasi.getSekretaris((err, result) => (err ? reject(err) : resolve(result)))),
-                new Promise((resolve, reject) => StrukturOrganisasi.getSubBagian((err, result) => (err ? reject(err) : resolve(result))))
-            ]);
-            
-            const mergedResults = [].concat(...results);
-            res.json(mergedResults);
-        } catch (err) {
-            res.status(500).json({ error: err.message });
-        }
+const getStrukturOrganisasi = async (req, res) => {
+    try {
+        const results = await Promise.all([
+            StrukturOrganisasiModel.getKetua(),
+            StrukturOrganisasiModel.getAnggotaDivisi(),
+            StrukturOrganisasiModel.getSekretaris(),
+            StrukturOrganisasiModel.getSubBagian()
+        ]);
+
+        const mergedResults = [].concat(...results);
+        res.json(mergedResults);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-}
+};
 
-module.exports = StrukturOrganisasiController;
+module.exports = {
+    getStrukturOrganisasi
+};
