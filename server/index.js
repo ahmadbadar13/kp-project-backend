@@ -57,6 +57,9 @@ app.use('/users', authRoutes);
 app.use('/users', authRoutes);
 app.use('/users', authRoutes);
 
+app.use('/auth', authRoutes);
+app.use('/auth', authRoutes);
+
 // ==================================== Start Admin ====================================
 // Import routes admin
 const divisiHpAdmRoutes = require('./routes/Admin/divisiHpAdmRoutes');

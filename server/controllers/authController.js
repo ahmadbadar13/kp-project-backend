@@ -1,28 +1,25 @@
 const bcrypt = require('bcrypt');
-const db = require('../config/db');
+const { findByEmail, create, findAll, getUserById, update, updateVerificationStatus, updatePasswordOnly  } = require('../models/authModel');
 
 // Controller untuk login
 const login = async (req, res) => {
     const { email, password } = req.body;
 
-    const query = 'SELECT * FROM user WHERE email = ?';
-    db.query(query, [email], async (err, results) => {
-        if (err) return res.status(500).json({ error: 'Database query failed' });
-
-        if (results.length > 0) {
-            const user = results[0];
-
-            // Cek password menggunakan bcrypt
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (isMatch) {
-                res.status(200).json({ message: 'Login berhasil', data: { id: user.id, role: user.role } });
-            } else {
-                res.status(401).json({ message: 'Kredensial tidak valid' });
-            }
-        } else {
-            res.status(401).json({ message: 'Kredensial tidak valid' });
+    try {
+        const user = await findByEmail(email);
+        if (!user) {
+            return res.status(401).json({ success: false, message: 'Kredensial tidak valid' });
         }
-    });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: 'Kredensial tidak valid' });
+        }
+
+        res.status(200).json({ success: true, message: 'Login berhasil', data: { id: user.id, role: user.role } });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', error: error.message });
+    }
 };
 
 // Controller untuk register
@@ -33,40 +30,29 @@ const register = async (req, res) => {
         return res.status(400).json({ success: false, message: 'Semua field harus diisi' });
     }
 
-    // Cek apakah email sudah ada di database
-    const query = 'SELECT * FROM user WHERE email = ?';
-    db.query(query, [email], async (err, results) => {
-        if (err) return res.status(500).json({ error: 'Database query failed' });
-
-        if (results.length > 0) {
+    try {
+        const existingUser = await findByEmail(email);
+        if (existingUser) {
             return res.status(400).json({ success: false, message: 'Email sudah terdaftar' });
         }
 
-        try {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            const insertQuery = 'INSERT INTO user (email, role, password) VALUES (?, ?, ?)';
-            db.query(insertQuery, [email, role, hashedPassword], (err, result) => {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server' });
-                }
-                res.json({ success: true, message: 'Registrasi berhasil' });
-            });
-        } catch (error) {
-            res.status(500).json({ success: false, message: 'Terjadi kesalahan saat registrasi' });
-        }
-    });
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await create(email, hashedPassword, role);
+
+        res.status(201).json({ success: true, message: 'Registrasi berhasil' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', error: error.message });
+    }
 };
 
 // Controller untuk mengambil semua pengguna
-const getAllUsers = (req, res) => {
-    const query = 'SELECT * FROM user';
-    db.query(query, (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error fetching users', details: err });
-        }
-        res.status(200).json(results);
-    });
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await findAll();
+        res.status(200).json({ success: true, data: users });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', error: error.message });
+    }
 };
 
 // Controller untuk memperbarui pengguna
@@ -74,58 +60,70 @@ const updateUser = async (req, res) => {
     const { id } = req.params;
     const { email, role, password } = req.body;
 
-    // Memastikan pengguna ada sebelum memperbarui
-    const getUserQuery = 'SELECT * FROM user WHERE id = ?';
-    db.query(getUserQuery, [id], async (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (results.length === 0) return res.status(404).json({ error: 'User not found' });
+    try {
+        const user = await getUserById(id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+        }
 
-        // Cek apakah email baru sudah digunakan oleh pengguna lain
-        const emailQuery = 'SELECT * FROM user WHERE email = ?';
-        db.query(emailQuery, [email], async (err, emailResults) => {
-            if (err) return res.status(500).json({ error: 'Database query failed' });
+        const existingEmailUser = await findByEmail(email);
+        if (existingEmailUser && existingEmailUser.id !== parseInt(id)) {
+            return res.status(400).json({ success: false, message: 'Email sudah digunakan oleh pengguna lain' });
+        }
 
-            // Jika email ditemukan dan bukan milik pengguna yang sedang diupdate
-            if (emailResults.length > 0 && emailResults[0].id !== parseInt(id)) {
-                return res.status(400).json({ error: 'Email sudah digunakan oleh pengguna lain' });
-            }
+        const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
+        await update(id, email, role, hashedPassword);
 
-            try {
-                let hashedPassword = null;
-                if (password) {
-                    hashedPassword = await bcrypt.hash(password, 10);
-                }
-
-                const updateQuery = 'UPDATE user SET email = ?, role = ?' + (hashedPassword ? ', password = ?' : '') + ' WHERE id = ?';
-                const params = [email, role];
-                if (hashedPassword) params.push(hashedPassword);
-                params.push(id);
-
-                db.query(updateQuery, params, (err, result) => {
-                    if (err) return res.status(500).json({ error: 'Error updating user', details: err });
-                    res.status(200).json({ success: true, message: 'User updated successfully', updatedAccount: results });
-                });
-            } catch (error) {
-                res.status(500).json({ error: 'Error hashing password', details: error });
-            }
-        });
-    });
+        res.status(200).json({ success: true, message: 'User berhasil diperbarui' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', error: error.message });
+    }
 };
 
-// Controller untuk menghapus pengguna
-const deleteUser = (req, res) => {
-    const { id } = req.params;
+const verifyEmail = async (req, res) => {
+    try {
+        const { email } = req.body;
 
-    const query = 'DELETE FROM user WHERE id = ?';
-    db.query(query, [id], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error deleting user', details: err });
+        if (!email) {
+            return res.status(400).json({ message: 'Email is required' });
         }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'User not found' });
+
+        // Cari pengguna berdasarkan email
+        const user = await findByEmail(email);
+        if (!user) {
+            return res.status(404).json({ message: 'Email not found' });
         }
-        res.status(200).json({ message: 'User deleted successfully' });
-    });
+
+        // Perbarui status email menjadi terverifikasi tanpa pengecekan
+        await updateVerificationStatus(email);
+
+        res.status(200).json({ message: 'Email has been verified successfully' });
+    } catch (error) {
+        console.error('Error verifying email:', error);
+        res.status(500).json({ message: 'An error occurred while verifying email', error: error.message });
+    }
 };
 
-module.exports = { login, register, getAllUsers, updateUser, deleteUser };
+// Controller untuk memperbarui password
+const updatePassword = async (req, res) => {
+    const { userId, newPassword, confirmPassword } = req.body;
+
+    if (!newPassword || !confirmPassword) {
+        return res.status(400).json({ success: false, message: 'Semua field harus diisi' });
+    }
+
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ success: false, message: 'Password tidak cocok' });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await update(userId, { password: hashedPassword });
+
+        res.status(200).json({ success: true, message: 'Password berhasil diperbarui' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', error: error.message });
+    }
+};
+
+module.exports = { login, register, getAllUsers, updateUser, verifyEmail, updatePassword };
