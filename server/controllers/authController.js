@@ -88,27 +88,30 @@ const verifyEmail = async (req, res) => {
             return res.status(400).json({ message: 'Email is required' });
         }
 
-        // Cari pengguna berdasarkan email
         const user = await findByEmail(email);
         if (!user) {
             return res.status(404).json({ message: 'Email not found' });
         }
 
-        // Perbarui status email menjadi terverifikasi tanpa pengecekan
         await updateVerificationStatus(email);
 
-        res.status(200).json({ message: 'Email has been verified successfully' });
+        res.status(200).json({ 
+            message: 'Email has been verified successfully', 
+            userId: user.id 
+        });
     } catch (error) {
         console.error('Error verifying email:', error);
         res.status(500).json({ message: 'An error occurred while verifying email', error: error.message });
     }
 };
 
+
 // Controller untuk memperbarui password
 const updatePassword = async (req, res) => {
-    const { userId, newPassword, confirmPassword } = req.body;
+    const { userId } = req.params; // Ambil userId dari URL
+    const { newPassword, confirmPassword } = req.body;
 
-    if (!newPassword || !confirmPassword) {
+    if (!userId || !newPassword || !confirmPassword) {
         return res.status(400).json({ success: false, message: 'Semua field harus diisi' });
     }
 
@@ -118,10 +121,11 @@ const updatePassword = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-        await update(userId, { password: hashedPassword });
+        await updatePasswordOnly(userId, hashedPassword);
 
         res.status(200).json({ success: true, message: 'Password berhasil diperbarui' });
     } catch (error) {
+        console.error('Error updating password:', error);
         res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', error: error.message });
     }
 };

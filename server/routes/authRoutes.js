@@ -9,6 +9,6 @@ router.get('/', getAllUsers);
 router.put('/update/:id', updateUser);
 
 router.post('/verify-email', verifyEmail);
-router.post('/update-password', updatePassword);
+router.put('/update-password/:userId', updatePassword);
 
 module.exports = router;
