@@ -1,41 +1,45 @@
-const DivisiHpModel = require('../../models/Operator/divisiHpOpModel');
+const { addDivisiHp } = require('../../models/Operator/divisiHpOpModel');
 
-const addDivisiHpOp = (req, res) => {
-    const { name } = req.body;
-    const photo = req.file ? `/uploads/${req.file.filename}` : null;
+const addDivisiHpOp = async (req, res) => {
+    try {
+        // Mendapatkan data dari body request
+        const { nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp } = req.body;
 
-    // Mengecek jumlah data
-    DivisiHpModel.checkDataCount((err, result) => {
-        if (err) {
-            console.error('Error checking data in divisi_hp:', err.message);
-            return res.status(500).json({ error: err.message });
+        // Validasi jika nama divisi tidak ada
+        if (!nama_div_hp || !tanggal_lahir || !email) {
+            return res.status(400).json({
+                success: false,
+                message: 'Nama divisi, tanggal lahir, dan email wajib diisi.'
+            });
         }
 
-        const totalUsers = result[0].total;
-
-        if (totalUsers >= 1) {
-            return res.status(400).json({ success: false, message: 'Maksimal hanya bisa menambahkan 1 data!' });
-        }
-
-        // Menambahkan data
-        DivisiHpModel.addDivisiHp(name, photo, (err) => {
-            if (err) {
-                console.error('Error inserting data into divisi_hp:', err.message);
-                return res.status(500).json({ error: err.message });
-            }
-            res.status(201).json({ success: true, message: 'User added successfully' });
+        // Simpan data ke database
+        await addDivisiHp({ 
+            nama_div_hp, 
+            foto_div_hp, 
+            tanggal_lahir, 
+            email, 
+            komentar_div_hp 
         });
-    });
+
+        res.status(201).json({ success: true, message: 'Divisi berhasil ditambahkan.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Error adding data',
+            error: error.message
+        });
+    }
 };
 
-const getDivisiHpOp = (req, res) => {
-    DivisiHpModel.getAllDivisiHp((err, results) => {
-        if (err) {
-            console.error('Error fetching data:', err.message);
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json(results);
-    });
+const getDivisiHpOp = async (req, res) => {
+    try {
+        const divisi = await getAllDivisi();
+        res.status(200).json(divisi);
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error fetching data', error: error.message });
+    }
 };
 
 const updtDivisiHpOp = (req, res) => {
