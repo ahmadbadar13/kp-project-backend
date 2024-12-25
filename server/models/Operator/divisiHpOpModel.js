@@ -1,14 +1,15 @@
 const db = require('../../config/db');
 
 const addDivisiHp = async (data) => {
-    const { nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp } = data;
+    const { nama_div_hp, foto_div_hp, tanggal_lahir, email, alamat, komentar_div_hp } = data;
     try {
         // Menjalankan query untuk menambah divisi dengan data yang diterima
-        await db.query('INSERT INTO divisi_hp (nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp) VALUES (?, ?, ?, ?, ?)', [
+        await db.query('INSERT INTO divisi_hp (nama_div_hp, foto_div_hp, tanggal_lahir, email, alamat, komentar_div_hp) VALUES (?, ?, ?, ?, ?, ?)', [
             nama_div_hp,
             foto_div_hp,
             tanggal_lahir,
             email,
+            alamat,
             komentar_div_hp
         ]);
     } catch (error) {
@@ -52,7 +53,7 @@ const getDivisiHpById = (id) => {
     });
 };
 
-const updateDivisiHp = (id, nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp) => {
+const updateDivisiHp = (id, nama_div_hp, foto_div_hp, tanggal_lahir, email, alamat, komentar_div_hp) => {
     return new Promise((resolve, reject) => {
         // Hanya update kolom yang ada perubahan
         const updateUserQuery = `
@@ -62,13 +63,14 @@ const updateDivisiHp = (id, nama_div_hp, foto_div_hp, tanggal_lahir, email, kome
                 foto_div_hp = ?, 
                 tanggal_lahir = ?, 
                 email = ?, 
+                alamat = ?,
                 komentar_div_hp = ?
             WHERE id = ?`;
 
         console.log("Query:", updateUserQuery);
-        console.log("Values:", [nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp, id]);
+        console.log("Values:", [nama_div_hp, foto_div_hp, tanggal_lahir, email, alamat, komentar_div_hp, id]);
 
-        db.query(updateUserQuery, [nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp, id], (err, result) => {
+        db.query(updateUserQuery, [nama_div_hp, foto_div_hp, tanggal_lahir, email, alamat, komentar_div_hp, id], (err, result) => {
             if (err) {
                 reject(err);
             } else {

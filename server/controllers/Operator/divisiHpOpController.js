@@ -1,13 +1,13 @@
-const { addDivisiHp, getAllDivisiHp, deleteDivisiHp } = require('../../models/Operator/divisiHpOpModel');
+const { addDivisiHp, getAllDivisiHp } = require('../../models/Operator/divisiHpOpModel');
 const DivisiHpModel = require('../../models/Operator/divisiHpOpModel');
 
 const addDivisiHpOp = async (req, res) => {
     try {
         // Mendapatkan data dari body request
-        const { nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp } = req.body;
+        const { nama_div_hp, foto_div_hp, tanggal_lahir, email, alamat, komentar_div_hp } = req.body;
 
         // Validasi jika nama divisi tidak ada
-        if (!nama_div_hp || !tanggal_lahir || !email) {
+        if (!nama_div_hp || !tanggal_lahir || !email || !alamat) {
             return res.status(400).json({
                 success: false,
                 message: 'Nama divisi, tanggal lahir, dan email wajib diisi.'
@@ -19,7 +19,8 @@ const addDivisiHpOp = async (req, res) => {
             nama_div_hp, 
             foto_div_hp, 
             tanggal_lahir, 
-            email, 
+            email,
+            alamat,
             komentar_div_hp 
         });
 
@@ -52,7 +53,7 @@ const getDivisiHpOp = async (req, res) => {
 
 const updtDivisiHpOp = async (req, res) => {
     const { id } = req.params;
-    const { name, tanggal_lahir, email, komentar_div_hp } = req.body;
+    const { name, tanggal_lahir, email, alamat, komentar_div_hp } = req.body;
     const photo = req.file ? `/uploads/${req.file.filename}` : null;
 
     try {
@@ -69,10 +70,11 @@ const updtDivisiHpOp = async (req, res) => {
         const updatedPhoto = photo !== null ? photo : results[0].foto_div_hp;
         const updatedTanggalLahir = tanggal_lahir !== undefined ? tanggal_lahir : results[0].tanggal_lahir;
         const updatedEmail = email !== undefined ? email : results[0].email;
+        const updatedAlamat = alamat !== undefined ? alamat : results[0].alamat;
         const updatedKomentar = komentar_div_hp !== undefined ? komentar_div_hp : results[0].komentar_div_hp;
 
         // Update hanya data yang berubah
-        const updateResult = await DivisiHpModel.updateDivisiHp(id, updatedName, updatedPhoto, updatedTanggalLahir, updatedEmail, updatedKomentar);
+        const updateResult = await DivisiHpModel.updateDivisiHp(id, updatedName, updatedPhoto, updatedTanggalLahir, updatedEmail, updatedAlamat, updatedKomentar);
         
         if (updateResult.affectedRows > 0) {
             res.status(200).json({ success: true, message: 'Data berhasil diperbarui' });
