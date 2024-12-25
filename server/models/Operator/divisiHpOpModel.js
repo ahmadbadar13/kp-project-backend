@@ -22,14 +22,22 @@ const checkDataCount = (callback) => {
 };
 
 const getAllDivisiHp = async () => {
-    try {
-        const [rows] = await db.query('SELECT * FROM divisi_hp');
-        return rows;
-    } catch (error) {
-        throw new Error('Error fetching data from database: ' + error.message);
-    }
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM divisi_hp', (error, results) => {
+            if (error) {
+                reject('Error fetching data from database: ' + error.message);
+                return;
+            }
+            // Log hasil query untuk memastikan data dikembalikan dengan benar
+            console.log('Query result:', results);  // Debugging
+            if (Array.isArray(results)) {
+                resolve(results);
+            } else {
+                reject('Query result is not an array');
+            }
+        });
+    });
 };
-
 
 const getDivisiHpById = (id, callback) => {
     const query = 'SELECT * FROM divisi_hp WHERE id = ?';

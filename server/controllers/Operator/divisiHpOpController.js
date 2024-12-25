@@ -1,4 +1,5 @@
-const { addDivisiHp } = require('../../models/Operator/divisiHpOpModel');
+const { addDivisiHp, getAllDivisiHp, deleteDivisiHp } = require('../../models/Operator/divisiHpOpModel');
+const DivisiHpModel = require('../../models/Operator/divisiHpOpModel');
 
 const addDivisiHpOp = async (req, res) => {
     try {
@@ -35,10 +36,17 @@ const addDivisiHpOp = async (req, res) => {
 
 const getDivisiHpOp = async (req, res) => {
     try {
-        const divisi = await getAllDivisi();
-        res.status(200).json(divisi);
+        const divisiHpData = await getAllDivisiHp();
+        
+        // Periksa apakah data ada dan dalam bentuk array
+        if (!divisiHpData || !Array.isArray(divisiHpData) || divisiHpData.length === 0) {
+            return res.status(404).send('No data found');
+        }
+        
+        res.json(divisiHpData);  // Kirimkan data sebagai respons
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error fetching data', error: error.message });
+        console.error('Error occurred:', error);
+        res.status(500).send('Error fetching data from database');
     }
 };
 
