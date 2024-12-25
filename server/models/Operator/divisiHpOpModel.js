@@ -29,7 +29,7 @@ const getAllDivisiHp = async () => {
                 return;
             }
             // Log hasil query untuk memastikan data dikembalikan dengan benar
-            console.log('Query result:', results);  // Debugging
+            console.log('Query result:', results);
             if (Array.isArray(results)) {
                 resolve(results);
             } else {
@@ -39,14 +39,43 @@ const getAllDivisiHp = async () => {
     });
 };
 
-const getDivisiHpById = (id, callback) => {
-    const query = 'SELECT * FROM divisi_hp WHERE id = ?';
-    db.query(query, [id], callback);
+const getDivisiHpById = (id) => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM divisi_hp WHERE id = ?';
+        db.query(query, [id], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
 };
 
-const updateDivisiHp = (id, name, photo, callback) => {
-    const updateUserQuery = 'UPDATE divisi_hp SET nama_div_hp = ?, foto_div_hp = ? WHERE id = ?';
-    db.query(updateUserQuery, [name, photo, id], callback);
+const updateDivisiHp = (id, nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp) => {
+    return new Promise((resolve, reject) => {
+        // Hanya update kolom yang ada perubahan
+        const updateUserQuery = `
+            UPDATE divisi_hp 
+            SET 
+                nama_div_hp = ?, 
+                foto_div_hp = ?, 
+                tanggal_lahir = ?, 
+                email = ?, 
+                komentar_div_hp = ?
+            WHERE id = ?`;
+
+        console.log("Query:", updateUserQuery);
+        console.log("Values:", [nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp, id]);
+
+        db.query(updateUserQuery, [nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp, id], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
 };
 
 const deleteDivisiHp = (id, callback) => {

@@ -43,38 +43,46 @@ const getDivisiHpOp = async (req, res) => {
             return res.status(404).send('No data found');
         }
         
-        res.json(divisiHpData);  // Kirimkan data sebagai respons
+        res.json(divisiHpData);
     } catch (error) {
         console.error('Error occurred:', error);
         res.status(500).send('Error fetching data from database');
     }
 };
 
-const updtDivisiHpOp = (req, res) => {
+const updtDivisiHpOp = async (req, res) => {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, tanggal_lahir, email, komentar_div_hp } = req.body;
     const photo = req.file ? `/uploads/${req.file.filename}` : null;
 
-    DivisiHpModel.getDivisiHpById(id, (err, results) => {
-        if (err) {
-            console.error('Error fetching user:', err.message);
-            return res.status(500).json({ error: err.message });
-        }
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
+    try {
+        // Cek apakah user dengan ID ada di database
+        const results = await DivisiHpModel.getDivisiHpById(id);
+        console.log(results);
+        
+        if (!results || results.length === 0) {
+            return res.status(404).json({ error: 'Data tidak ditemukan' });
         }
 
-        const updatedName = name || results[0].nama_div_hp;
-        const updatedPhoto = photo || results[0].foto_div_hp;
+        // Hanya ubah data yang diterima, jika ada perubahan
+        const updatedName = name !== undefined ? name : results[0].nama_div_hp;
+        const updatedPhoto = photo !== null ? photo : results[0].foto_div_hp;
+        const updatedTanggalLahir = tanggal_lahir !== undefined ? tanggal_lahir : results[0].tanggal_lahir;
+        const updatedEmail = email !== undefined ? email : results[0].email;
+        const updatedKomentar = komentar_div_hp !== undefined ? komentar_div_hp : results[0].komentar_div_hp;
 
-        DivisiHpModel.updateDivisiHp(id, updatedName, updatedPhoto, (err) => {
-            if (err) {
-                console.error('Error updating user:', err.message);
-                return res.status(500).json({ error: err.message });
-            }
-            res.status(200).json({ success: true, message: 'User updated successfully' });
-        });
-    });
+        // Update hanya data yang berubah
+        const updateResult = await DivisiHpModel.updateDivisiHp(id, updatedName, updatedPhoto, updatedTanggalLahir, updatedEmail, updatedKomentar);
+        
+        if (updateResult.affectedRows > 0) {
+            res.status(200).json({ success: true, message: 'Data berhasil diperbarui' });
+        } else {
+            res.status(500).json({ error: 'Tidak dapat memperbarui data' });
+        }
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: 'Terjadi kesalahan saat mengedit anggota.' });
+    }
 };
 
 const delDivisiHpOp = (req, res) => {
