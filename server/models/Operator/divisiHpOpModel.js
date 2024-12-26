@@ -1,7 +1,5 @@
 const db = require('../../config/db');
 
-// Fungsi untuk menambahkan data ke tabel
-// Fungsi untuk menambahkan data ke tabel
 const addDivisiHp = async (data) => {
     const { nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp } = data;
     try {
@@ -14,7 +12,6 @@ const addDivisiHp = async (data) => {
     }
 };
 
-// Fungsi untuk menghitung jumlah data di tabel
 const getDivisiHpCount = async () => {
     try {
         // Menggunakan Promises dengan mysql
@@ -30,7 +27,6 @@ const getDivisiHpCount = async () => {
         throw new Error('Error while counting data: ' + error.message);
     }
 };
-
 
 const getAllDivisiHp = async () => {
     return new Promise((resolve, reject) => {

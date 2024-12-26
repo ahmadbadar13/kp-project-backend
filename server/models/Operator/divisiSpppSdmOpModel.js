@@ -1,33 +1,85 @@
 const db = require('../../config/db');
 
-// Menambahkan data Divisi SPPP SDM
-const addDivisiSpppSdm = (name, photo, callback) => {
-    const insertQuery = 'INSERT INTO divisi_sppp_sdm (nama_div_sppp_sdm, foto_div_sppp_sdm, komentar_div_sppp_sdm) VALUES (?, ?, ?)';
-    db.query(insertQuery, [name, photo, ''], callback);
+const addDivisiSpppSdm = async (data) => {
+    const { nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, komentar_div_sppp_sdm } = data;
+    try {
+        await db.query(
+            'INSERT INTO divisi_sppp_sdm (nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, komentar_div_sppp_sdm) VALUES (?, ?, ?, ?, ?)',
+            [nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, komentar_div_sppp_sdm]
+        );
+    } catch (error) {
+        throw new Error('Error while adding data to the database: ' + error.message);
+    }
 };
 
-// Mengecek jumlah data dalam tabel divisi_sppp_sdm
-const checkDataCount = (callback) => {
-    const checkQuery = 'SELECT COUNT(*) AS total FROM divisi_sppp_sdm';
-    db.query(checkQuery, callback);
+const getDivisiSpppSdmCount = async () => {
+    try {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT COUNT(*) AS count FROM divisi_sppp_sdm', (error, results) => {
+                if (error) {
+                    return reject(new Error('Error while counting data: ' + error.message));
+                }
+                resolve(results[0]?.count || 0);
+            });
+        });
+    } catch (error) {
+        throw new Error('Error while counting data: ' + error.message);
+    }
 };
 
-// Mendapatkan seluruh data Divisi SPPP SDM
-const getAllDivisiSpppSdm = (callback) => {
-    const query = 'SELECT * FROM divisi_sppp_sdm';
-    db.query(query, callback);
+const getAllDivisiSpppSdm = async () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM divisi_sppp_sdm', (error, results) => {
+            if (error) {
+                reject('Error fetching data from database: ' + error.message);
+                return;
+            }
+            console.log('Query result:', results);
+            if (Array.isArray(results)) {
+                resolve(results);
+            } else {
+                reject('Query result is not an array');
+            }
+        });
+    });
 };
 
-// Mendapatkan data Divisi SPPP SDM berdasarkan ID
-const getDivisiSpppSdmById = (id, callback) => {
-    const query = 'SELECT * FROM divisi_sppp_sdm WHERE id = ?';
-    db.query(query, [id], callback);
+const getDivisiSpppSdmById = (id) => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM divisi_sppp_sdm WHERE id = ?';
+        db.query(query, [id], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
 };
 
-// Mengupdate data Divisi SPPP SDM berdasarkan ID
-const updateDivisiSpppSdm = (id, name, photo, callback) => {
-    const updateUserQuery = 'UPDATE divisi_sppp_sdm SET nama_div_sppp_sdm = ?, foto_div_sppp_sdm = ? WHERE id = ?';
-    db.query(updateUserQuery, [name, photo, id], callback);
+const updateDivisiSpppSdm = (id, nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, komentar_div_sppp_sdm) => {
+    return new Promise((resolve, reject) => {
+        const updateUserQuery = `
+            UPDATE divisi_sppp_sdm 
+            SET 
+                nama_div_sppp_sdm = ?, 
+                foto_div_sppp_sdm = ?, 
+                tanggal_lahir = ?, 
+                email = ?, 
+                komentar_div_sppp_sdm = ?
+            WHERE id = ?`;
+
+        console.log("Query:", updateUserQuery);
+        console.log("Values:", [nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, komentar_div_sppp_sdm, id]);
+
+        db.query(updateUserQuery, [nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, komentar_div_sppp_sdm, id], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
 };
 
 // Menghapus data Divisi SPPP SDM berdasarkan ID
@@ -50,7 +102,7 @@ const deleteKomentarDivisiSpppSdm = (id, callback) => {
 
 module.exports = {
     addDivisiSpppSdm,
-    checkDataCount,
+    getDivisiSpppSdmCount,
     getAllDivisiSpppSdm,
     getDivisiSpppSdmById,
     updateDivisiSpppSdm,
