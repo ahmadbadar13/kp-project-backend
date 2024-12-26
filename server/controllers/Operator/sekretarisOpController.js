@@ -1,4 +1,8 @@
-const { insertSekretaris, getAllSekretaris, checkSekretarisCount } = require('../../models/Operator/sekretarisOpModel');
+const { insertSekretaris,
+    getAllSekretaris,
+    checkSekretarisCount,
+    getSekretarisById,
+    updateSekretaris } = require('../../models/Operator/sekretarisOpModel');
 const sekretarisModel = require('../../models/Operator/sekretarisOpModel');
 
 const addSekretarisOp = async (req, res) => {
