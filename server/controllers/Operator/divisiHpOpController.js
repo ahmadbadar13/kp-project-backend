@@ -1,12 +1,10 @@
-const { addDivisiHp, getAllDivisiHp } = require('../../models/Operator/divisiHpOpModel');
+const { addDivisiHp, getAllDivisiHp, getDivisiHpCount } = require('../../models/Operator/divisiHpOpModel');
 const DivisiHpModel = require('../../models/Operator/divisiHpOpModel');
 
 const addDivisiHpOp = async (req, res) => {
     try {
-        // Mendapatkan data dari body request
         const { nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp } = req.body;
 
-        // Validasi jika nama divisi tidak ada
         if (!nama_div_hp || !tanggal_lahir || !email) {
             return res.status(400).json({
                 success: false,
@@ -14,13 +12,20 @@ const addDivisiHpOp = async (req, res) => {
             });
         }
 
-        // Simpan data ke database
-        await addDivisiHp({ 
-            nama_div_hp, 
-            foto_div_hp, 
-            tanggal_lahir, 
+        const existingData = await getDivisiHpCount();
+        if (existingData >= 1) {
+            return res.status(400).json({
+                success: false,
+                message: 'Tidak bisa menambah data lagi. Hanya diperbolehkan satu data.'
+            });
+        }
+
+        await addDivisiHp({
+            nama_div_hp,
+            foto_div_hp,
+            tanggal_lahir,
             email,
-            komentar_div_hp 
+            komentar_div_hp,
         });
 
         res.status(201).json({ success: true, message: 'Divisi berhasil ditambahkan.' });
@@ -29,7 +34,7 @@ const addDivisiHpOp = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error adding data',
-            error: error.message
+            error: error.message,
         });
     }
 };

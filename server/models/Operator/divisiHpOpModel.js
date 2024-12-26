@@ -1,25 +1,36 @@
 const db = require('../../config/db');
 
+// Fungsi untuk menambahkan data ke tabel
+// Fungsi untuk menambahkan data ke tabel
 const addDivisiHp = async (data) => {
     const { nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp } = data;
     try {
-        // Menjalankan query untuk menambah divisi dengan data yang diterima
-        await db.query('INSERT INTO divisi_hp (nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp) VALUES (?, ?, ?, ?, ?)', [
-            nama_div_hp,
-            foto_div_hp,
-            tanggal_lahir,
-            email,
-            komentar_div_hp
-        ]);
+        await db.query(
+            'INSERT INTO divisi_hp (nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp) VALUES (?, ?, ?, ?, ?)',
+            [nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp]
+        );
     } catch (error) {
         throw new Error('Error while adding data to the database: ' + error.message);
     }
 };
 
-const checkDataCount = (callback) => {
-    const checkQuery = 'SELECT COUNT(*) AS total FROM divisi_hp';
-    db.query(checkQuery, callback);
+// Fungsi untuk menghitung jumlah data di tabel
+const getDivisiHpCount = async () => {
+    try {
+        // Menggunakan Promises dengan mysql
+        return new Promise((resolve, reject) => {
+            db.query('SELECT COUNT(*) AS count FROM divisi_hp', (error, results) => {
+                if (error) {
+                    return reject(new Error('Error while counting data: ' + error.message));
+                }
+                resolve(results[0]?.count || 0); // Mengembalikan nilai count
+            });
+        });
+    } catch (error) {
+        throw new Error('Error while counting data: ' + error.message);
+    }
 };
+
 
 const getAllDivisiHp = async () => {
     return new Promise((resolve, reject) => {
@@ -95,7 +106,7 @@ const deleteKomentarDivisiHp = (id, callback) => {
 
 module.exports = {
     addDivisiHp,
-    checkDataCount,
+    getDivisiHpCount,
     getAllDivisiHp,
     getDivisiHpById,
     updateDivisiHp,
