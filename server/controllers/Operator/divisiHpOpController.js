@@ -3,12 +3,12 @@ const DivisiHpModel = require('../../models/Operator/divisiHpOpModel');
 
 const addDivisiHpOp = async (req, res) => {
     try {
-        const { nama_div_hp, foto_div_hp, tanggal_lahir, email, komentar_div_hp } = req.body;
+        const { nama_div_hp, foto_div_hp, tanggal_lahir, email, masa_jabatan, komentar_div_hp } = req.body;
 
-        if (!nama_div_hp || !tanggal_lahir || !email) {
+        if (!nama_div_hp || !tanggal_lahir || !email || !masa_jabatan) {
             return res.status(400).json({
                 success: false,
-                message: 'Nama divisi, tanggal lahir, dan email wajib diisi.'
+                message: 'Nama divisi, tanggal lahir, email, dan masa jabatan wajib diisi.'
             });
         }
 
@@ -25,6 +25,7 @@ const addDivisiHpOp = async (req, res) => {
             foto_div_hp,
             tanggal_lahir,
             email,
+            masa_jabatan,
             komentar_div_hp,
         });
 

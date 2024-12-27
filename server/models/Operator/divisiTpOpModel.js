@@ -2,11 +2,11 @@ const db = require('../../config/db');
 
 // Menambahkan data Divisi TP
 const addDivisiTp = async (data) => {
-    const { nama_div_tp, foto_div_tp, tanggal_lahir, email, komentar_div_tp } = data;
+    const { nama_div_tp, foto_div_tp, tanggal_lahir, email, masa_jabatan, komentar_div_tp } = data;
     try {
         await db.query(
-            'INSERT INTO divisi_tp (nama_div_tp, foto_div_tp, tanggal_lahir, email, komentar_div_tp) VALUES (?, ?, ?, ?, ?)',
-            [nama_div_tp, foto_div_tp, tanggal_lahir, email, komentar_div_tp]
+            'INSERT INTO divisi_tp (nama_div_tp, foto_div_tp, tanggal_lahir, email, masa_jabatan, komentar_div_tp) VALUES (?, ?, ?, ?, ?, ?)',
+            [nama_div_tp, foto_div_tp, tanggal_lahir, email, masa_jabatan, komentar_div_tp]
         );
     } catch (error) {
         throw new Error('Error while adding data to the database: ' + error.message);

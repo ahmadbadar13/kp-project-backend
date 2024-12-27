@@ -1,11 +1,11 @@
 const db = require('../../config/db');
 
 const addDivisiKurl = async (data) => {
-    const { nama_div_kurl, foto_div_kurl, tanggal_lahir, email, komentar_div_kurl } = data;
+    const { nama_div_kurl, foto_div_kurl, tanggal_lahir, email, masa_jabatan, komentar_div_kurl } = data;
     try {
         await db.query(
-            'INSERT INTO divisi_kurl (nama_div_kurl, foto_div_kurl, tanggal_lahir, email, komentar_div_kurl) VALUES (?, ?, ?, ?, ?)',
-            [nama_div_kurl, foto_div_kurl, tanggal_lahir, email, komentar_div_kurl]
+            'INSERT INTO divisi_kurl (nama_div_kurl, foto_div_kurl, tanggal_lahir, email, masa_jabatan, komentar_div_kurl) VALUES (?, ?, ?, ?, ?, ?)',
+            [nama_div_kurl, foto_div_kurl, tanggal_lahir, email, masa_jabatan, komentar_div_kurl]
         );
     } catch (error) {
         throw new Error('Error while adding data to the database: ' + error.message);
