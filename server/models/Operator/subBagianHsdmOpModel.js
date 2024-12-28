@@ -1,9 +1,19 @@
 const db = require('../../config/db');
 
 // Menambahkan data sub bagian HSDM
-const insertSubBagianHsdm = (data, callback) => {
-    const query = 'INSERT INTO sub_bagian_hsdm (nama_sb_hsdm, nip_sb_hsdm, posisi_sb_hsdm, foto_sb_hsdm) VALUES (?, ?, ?, ?)';
-    db.query(query, [data.name, data.nip, data.position, data.photo], callback);
+const insertSubBagianHsdm = async (data) => {
+    const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm } = data;
+    try {
+        // Pastikan kueri SQLnya benar
+        const result = await db.query(
+            'INSERT INTO sub_bagian_hsdm (nama_sb_hsdm, nip_sb_hsdm, posisi_sb_hsdm, foto_sb_hsdm, tanggal_lahir, email, komentar_sb_hsdm) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm]
+        );
+        console.log(result);  // Cek hasil query
+    } catch (error) {
+        console.error('Error while adding data to the database:', error);
+        throw new Error('Error while adding data to the database: ' + error.message);
+    }
 };
 
 // Mendapatkan semua data sub bagian HSDM

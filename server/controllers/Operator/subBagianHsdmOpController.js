@@ -1,21 +1,42 @@
+const { insertSubBagianHsdm } = require('../../models/Operator/subBagianHsdmOpModel');
 const subBagianHsdmModel = require('../../models/Operator/subBagianHsdmOpModel');
 
 // Create Data Sub Bagian HSDM Operator
-const addSubBagianHsdmOp = (req, res) => {
-    const { name, nip, position } = req.body;
-    const photo = req.file ? `/uploads/${req.file.filename}` : null;
+const addSubBagianHsdmOp = async (req, res) => {
+    try {
+        const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm } = req.body;
 
-    if (!name || !nip || !position) {
-        return res.status(400).json({ error: 'Nama, NIP, dan posisi diperlukan' });
-    }
+        // Log data yang diterima untuk debugging
+        console.log(req.body); // Cek data yang diterima oleh backend
 
-    subBagianHsdmModel.insertSubBagianHsdm({ name, nip, position, photo }, (err, results) => {
-        if (err) {
-            console.error('Error inserting data into sub_bagian_hsdm:', err.message);
-            return res.status(500).json({ error: 'Gagal menambahkan data. Silakan coba lagi.' });
+        // Validasi data yang dibutuhkan
+        if (!nama_sb || !nip_sb || !posisi_sb || !tanggal_lahir || !email) {
+            return res.status(400).json({
+                success: false,
+                message: 'Nama, NIP, posisi, tanggal lahir, dan email wajib diisi.'
+            });
         }
-        res.status(201).json({ success: true, message: 'User added successfully' });
-    });
+
+        // Menambahkan data sub bagian HSDM ke database
+        await insertSubBagianHsdm({
+            nama_sb,
+            nip_sb,
+            posisi_sb,
+            foto_sb,
+            tanggal_lahir,
+            email,
+            komentar_sb_hsdm,
+        });
+
+        res.status(201).json({ success: true, message: 'Data Sub Bagian HSDM berhasil ditambahkan.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Error adding data',
+            error: error.message,
+        });
+    }
 };
 
 // Read Data Sub Bagian HSDM Operator
