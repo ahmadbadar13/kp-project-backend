@@ -1,12 +1,19 @@
 const db = require('../../config/db');
 
-const getAllSekretaris = (callback) => {
-    const query = 'SELECT * FROM sekretaris';
-    db.query(query, (err, results) => {
-        if (err) {
-            return callback(err, null);
-        }
-        callback(null, results);
+const getAllSekretaris = async () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM sekretaris', (error, results) => {
+            if (error) {
+                reject('Error fetching data from database: ' + error.message);
+                return;
+            }
+            console.log('Query result:', results);
+            if (Array.isArray(results)) {
+                resolve(results);
+            } else {
+                reject('Query result is not an array');
+            }
+        });
     });
 };
 

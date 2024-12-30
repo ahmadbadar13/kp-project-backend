@@ -1,13 +1,19 @@
 const { getAllDivisiKurl, addComment } = require('../../models/Admin/divisiKurlAdmModel');
 
-const getDivisiKurlAdm = (req, res) => {
-    getAllDivisiKurl((err, results) => {
-        if (err) {
-            console.error('Error executing query:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
+const getDivisiKurlAdm = async (req, res) => {
+    try {
+        const divisiKurlData = await getAllDivisiKurl();
+        
+        // Pastikan data selalu dikembalikan sebagai array, meskipun kosong
+        if (!divisiKurlData || !Array.isArray(divisiKurlData)) {
+            return res.status(200).json([]); // Kembalikan array kosong dengan status 200
         }
-        res.status(200).json(results);
-    });
+
+        res.status(200).json(divisiKurlData); // Kembalikan data jika ada
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({ error: 'Error fetching data from database' });
+    }
 };
 
 const addKomentarDivisiKurlAdm = (req, res) => {

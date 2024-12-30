@@ -2,12 +2,7 @@ const db = require('../../config/db');
 
 const getAllSbKul = (callback) => {
     const query = 'SELECT * FROM sub_bagian_kul';
-    db.query(query, (err, results) => {
-        if (err) {
-            return callback(err, null);
-        }
-        callback(null, results);
-    });
+    db.query(query, callback);
 };
 
 const addKomentar = (userId, comment, callback) => {

@@ -1,11 +1,9 @@
+const { getAllSbHsdm } = require('../../models/Admin/subBagianHsdmAdmModel');
 const SubBagianHsdm = require('../../models/Admin/subBagianHsdmAdmModel');
 
 const getSubBagianHsdmAdm = (req, res) => {
-    SubBagianHsdm.getAllSbHsdm((err, results) => {
-        if (err) {
-            console.error('Error fetching sub bagian HSDM:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
+    getAllSbHsdm((err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
         res.status(200).json(results);
     });
 };

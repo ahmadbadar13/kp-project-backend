@@ -1,12 +1,20 @@
 const db = require('../../config/db');
 
-const getAllDivisiHp = (callback) => {
-    const query = 'SELECT * FROM divisi_hp';
-    db.query(query, (err, results) => {
-        if (err) {
-            return callback(err, null);
-        }
-        callback(null, results);
+const getAllDivisiHp = async () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM divisi_hp', (error, results) => {
+            if (error) {
+                reject('Error fetching data from database: ' + error.message);
+                return;
+            }
+            // Log hasil query untuk memastikan data dikembalikan dengan benar
+            console.log('Query result:', results);
+            if (Array.isArray(results)) {
+                resolve(results);
+            } else {
+                reject('Query result is not an array');
+            }
+        });
     });
 };
 

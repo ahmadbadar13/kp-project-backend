@@ -1,11 +1,9 @@
+const { getAllSbKul } = require('../../models/Admin/subBagianHsdmAdmModel');
 const SubBagianKul = require('../../models/Admin/subBagianKulAdmModel');
 
 const getSubBagianKulAdm = (req, res) => {
-    SubBagianKul.getAllSbKul((err, results) => {
-        if (err) {
-            console.error('Error fetching sub bagian KUL:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
+    getAllSbKul((err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
         res.status(200).json(results);
     });
 };

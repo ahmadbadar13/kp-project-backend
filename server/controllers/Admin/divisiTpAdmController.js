@@ -1,13 +1,19 @@
 const { getAllDivisiTp, addComment } = require('../../models/Admin/divisiTpAdmModel');
 
-const getDivisiTpAdm = (req, res) => {
-    getAllDivisiTp((err, results) => {
-        if (err) {
-            console.error('Error executing query:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
+const getDivisiTpAdm = async (req, res) => {
+    try {
+        const divisiTpData = await getAllDivisiTp();
+        
+        // Pastikan data selalu dikembalikan sebagai array, meskipun kosong
+        if (!divisiTpData || !Array.isArray(divisiTpData)) {
+            return res.status(200).json([]); // Kembalikan array kosong dengan status 200
         }
-        res.status(200).json(results);
-    });
+
+        res.status(200).json(divisiTpData); // Kembalikan data jika ada
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({ error: 'Error fetching data from database' });
+    }
 };
 
 const addKomentarDivisiTpAdm = (req, res) => {

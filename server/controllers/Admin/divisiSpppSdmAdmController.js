@@ -1,13 +1,19 @@
 const { getAllDivisiSpppSdm, addComment } = require('../../models/Admin/divisiSpppSdmAdmModel');
 
-const getDivisiSpppSdmAdm = (req, res) => {
-    getAllDivisiSpppSdm((err, results) => {
-        if (err) {
-            console.error('Error executing query:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
+const getDivisiSpppSdmAdm = async (req, res) => {
+    try {
+        const divisiSpppSdmData = await getAllDivisiSpppSdm();
+        
+        // Pastikan data selalu dikembalikan sebagai array, meskipun kosong
+        if (!divisiSpppSdmData || !Array.isArray(divisiSpppSdmData)) {
+            return res.status(200).json([]); // Kembalikan array kosong dengan status 200
         }
-        res.status(200).json(results);
-    });
+
+        res.status(200).json(divisiSpppSdmData); // Kembalikan data jika ada
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({ error: 'Error fetching data from database' });
+    }
 };
 
 const addKomentarDivisiSpppSdmAdm = (req, res) => {

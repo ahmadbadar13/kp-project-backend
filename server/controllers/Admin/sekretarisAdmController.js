@@ -1,13 +1,20 @@
+const { getAllSekretaris } = require('../../models/Admin/sekretarisAdmModel');
 const Sekretaris = require('../../models/Admin/sekretarisAdmModel');
 
-const getSekretarisAdm = (req, res) => {
-    Sekretaris.getAllSekretaris((err, results) => {
-        if (err) {
-            console.error('Error fetching sekretaris:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
+const getSekretarisAdm = async (req, res) => {
+    try {
+        const sekretarisData = await getAllSekretaris();
+
+        // Pastikan data selalu dikembalikan sebagai array, meskipun kosong
+        if (!sekretarisData || !Array.isArray(sekretarisData)) {
+            return res.status(200).json([]); // Kembalikan array kosong dengan status 200
         }
-        res.status(200).json(results);
-    });
+
+        res.status(200).json(sekretarisData); // Kembalikan data jika ada
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({ error: 'Error fetching data from database' });
+    }
 };
 
 const addKomentarSekretarisAdm = (req, res) => {

@@ -1,11 +1,9 @@
+const { getAllSbTppph } = require('../../models/Admin/subBagianHsdmAdmModel');
 const SubBagianTppph = require('../../models/Admin/subBagianTppphAdmModel');
 
 const getSubBagianTppphAdm = (req, res) => {
-    SubBagianTppph.getAllSbTppph((err, results) => {
-        if (err) {
-            console.error('Error fetching sub bagian TPPPH:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
+    getAllSbTppph((err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
         res.status(200).json(results);
     });
 };

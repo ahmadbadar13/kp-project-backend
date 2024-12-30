@@ -1,11 +1,9 @@
+const { getAllSbPdi } = require('../../models/Admin/subBagianHsdmAdmModel');
 const SubBagianPdi = require('../../models/Admin/subBagianPdiAdmModel');
 
 const getSubBagianPdiAdm = (req, res) => {
-    SubBagianPdi.getAllSbPdi((err, results) => {
-        if (err) {
-            console.error('Error fetching sub bagian PDI:', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
+    getAllSbPdi((err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
         res.status(200).json(results);
     });
 };
