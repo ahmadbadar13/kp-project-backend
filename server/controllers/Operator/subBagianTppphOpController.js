@@ -1,24 +1,51 @@
+const { checkEmailExists, insertSubBagianTppph } = require('../../models/Operator/subBagianTppphOpModel');
 const subBagianTppphModel = require('../../models/Operator/subBagianTppphOpModel');
 
-// Fungsi untuk menambahkan data Sub Bagian TPPPH Operator
-const addSubBagianTppphOp = (req, res) => {
-    const { name, nip, position } = req.body;
-    const photo = req.file ? `/uploads/${req.file.filename}` : null;
+// Create Data Sub Bagian TPPPH Operator
+const addSubBagianTppphOp = async (req, res) => {
+    try {
+        const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_tppph } = req.body;
 
-    if (!name || !nip || !position) {
-        return res.status(400).json({ error: 'Nama, NIP, dan posisi diperlukan' });
-    }
-
-    subBagianTppphModel.insertSubBagianTppph({ name, nip, position, photo }, (err, results) => {
-        if (err) {
-            console.error('Error inserting data into sub_bagian_tppph:', err.message);
-            return res.status(500).json({ error: 'Gagal menambahkan data. Silakan coba lagi.' });
+        // Validasi input
+        if (!nama_sb || !nip_sb || !posisi_sb || !tanggal_lahir || !email) {
+            return res.status(400).json({
+                success: false,
+                message: 'Nama, NIP, posisi, tanggal lahir, dan email wajib diisi.',
+            });
         }
-        res.status(201).json({ success: true, message: 'User added successfully' });
-    });
+
+        // Cek apakah email sudah ada
+        const emailExists = await checkEmailExists(email);
+        if (emailExists) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email sudah terdaftar.',
+            });
+        }
+
+        // Tambahkan data ke database
+        await insertSubBagianTppph({
+            nama_sb,
+            nip_sb,
+            posisi_sb,
+            foto_sb,
+            tanggal_lahir,
+            email,
+            komentar_sb_tppph,
+        });
+
+        res.status(201).json({ success: true, message: 'Data Sub Bagian TPPPH berhasil ditambahkan.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Error adding data',
+            error: error.message,
+        });
+    }
 };
 
-// Fungsi untuk mendapatkan data Sub Bagian TPPPH Operator
+// Read Data Sub Bagian TPPPH Operator
 const getSubBagianTppphOp = (req, res) => {
     subBagianTppphModel.getAllSubBagianTppph((err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -26,7 +53,7 @@ const getSubBagianTppphOp = (req, res) => {
     });
 };
 
-// Fungsi untuk memperbarui data Sub Bagian TPPPH Operator
+// Update Data Sub Bagian TPPPH Operator
 const updtSubBagianTppphOp = (req, res) => {
     const { id } = req.params;
     const { name, nip, position } = req.body;
@@ -50,7 +77,7 @@ const updtSubBagianTppphOp = (req, res) => {
     });
 };
 
-// Fungsi untuk menghapus data Sub Bagian TPPPH Operator
+// Delete Data Sub Bagian TPPPH Operator
 const delSubBagianTppphOp = (req, res) => {
     const { id } = req.params;
     subBagianTppphModel.deleteSubBagianTppph(id, (err) => {
@@ -59,7 +86,7 @@ const delSubBagianTppphOp = (req, res) => {
     });
 };
 
-// Fungsi untuk mendapatkan komentar Sub Bagian TPPPH Operator
+// Read Komentar Sub Bagian TPPPH Operator
 const getKomentarSubBagianTppphOp = (req, res) => {
     const id = req.params.id;
 
@@ -79,7 +106,7 @@ const getKomentarSubBagianTppphOp = (req, res) => {
     });
 };
 
-// Fungsi untuk menghapus komentar Sub Bagian TPPPH
+// Delete Komentar Sub Bagian TPPPH
 const delKomentarSubBagianTppphOp = (req, res) => {
     const id = req.params.id;
 

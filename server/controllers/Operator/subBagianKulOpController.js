@@ -1,21 +1,48 @@
+const { checkEmailExists, insertSubBagianKul } = require('../../models/Operator/subBagianKulOpModel');
 const subBagianKulModel = require('../../models/Operator/subBagianKulOpModel');
 
 // Create Data Sub Bagian KUL Operator
-const addSubBagianKulOp = (req, res) => {
-    const { name, nip, position } = req.body;
-    const photo = req.file ? `/uploads/${req.file.filename}` : null;
+const addSubBagianKulOp = async (req, res) => {
+    try {
+        const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_kul } = req.body;
 
-    if (!name || !nip || !position) {
-        return res.status(400).json({ error: 'Nama, NIP, dan posisi diperlukan' });
-    }
-
-    subBagianKulModel.insertSubBagianKul({ name, nip, position, photo }, (err, results) => {
-        if (err) {
-            console.error('Error inserting data into sub_bagian_kul:', err.message);
-            return res.status(500).json({ error: 'Gagal menambahkan data. Silakan coba lagi.' });
+        // Validasi input
+        if (!nama_sb || !nip_sb || !posisi_sb || !tanggal_lahir || !email) {
+            return res.status(400).json({
+                success: false,
+                message: 'Nama, NIP, posisi, tanggal lahir, dan email wajib diisi.',
+            });
         }
-        res.status(201).json({ success: true, message: 'User added successfully' });
-    });
+
+        // Cek apakah email sudah ada
+        const emailExists = await checkEmailExists(email);
+        if (emailExists) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email sudah terdaftar.',
+            });
+        }
+
+        // Tambahkan data ke database
+        await insertSubBagianKul({
+            nama_sb,
+            nip_sb,
+            posisi_sb,
+            foto_sb,
+            tanggal_lahir,
+            email,
+            komentar_sb_kul,
+        });
+
+        res.status(201).json({ success: true, message: 'Data Sub Bagian KUL berhasil ditambahkan.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Error adding data',
+            error: error.message,
+        });
+    }
 };
 
 // Read Data Sub Bagian KUL Operator
@@ -50,7 +77,7 @@ const updtSubBagianKulOp = (req, res) => {
     });
 };
 
-// Delete Sub Bagian KUL Operator
+// Delete Data Sub Bagian KUL Operator
 const delSubBagianKulOp = (req, res) => {
     const { id } = req.params;
     subBagianKulModel.deleteSubBagianKul(id, (err) => {
