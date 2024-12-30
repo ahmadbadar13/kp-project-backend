@@ -1,4 +1,4 @@
-const { getAllSbKul } = require('../../models/Admin/subBagianHsdmAdmModel');
+const { getAllSbKul } = require('../../models/Admin/subBagianKulAdmModel');
 const SubBagianKul = require('../../models/Admin/subBagianKulAdmModel');
 
 const getSubBagianKulAdm = (req, res) => {
