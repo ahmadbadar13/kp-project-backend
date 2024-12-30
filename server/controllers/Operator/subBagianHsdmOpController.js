@@ -1,4 +1,4 @@
-const { insertSubBagianHsdm } = require('../../models/Operator/subBagianHsdmOpModel');
+const { checkEmailExists, insertSubBagianHsdm } = require('../../models/Operator/subBagianHsdmOpModel');
 const subBagianHsdmModel = require('../../models/Operator/subBagianHsdmOpModel');
 
 // Create Data Sub Bagian HSDM Operator
@@ -6,18 +6,24 @@ const addSubBagianHsdmOp = async (req, res) => {
     try {
         const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm } = req.body;
 
-        // Log data yang diterima untuk debugging
-        console.log(req.body); // Cek data yang diterima oleh backend
-
-        // Validasi data yang dibutuhkan
+        // Validasi input
         if (!nama_sb || !nip_sb || !posisi_sb || !tanggal_lahir || !email) {
             return res.status(400).json({
                 success: false,
-                message: 'Nama, NIP, posisi, tanggal lahir, dan email wajib diisi.'
+                message: 'Nama, NIP, posisi, tanggal lahir, dan email wajib diisi.',
             });
         }
 
-        // Menambahkan data sub bagian HSDM ke database
+        // Cek apakah email sudah ada
+        const emailExists = await checkEmailExists(email);
+        if (emailExists) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email sudah terdaftar.',
+            });
+        }
+
+        // Tambahkan data ke database
         await insertSubBagianHsdm({
             nama_sb,
             nip_sb,

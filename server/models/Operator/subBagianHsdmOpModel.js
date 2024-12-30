@@ -1,19 +1,42 @@
 const db = require('../../config/db');
 
 // Menambahkan data sub bagian HSDM
-const insertSubBagianHsdm = async (data) => {
-    const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm } = data;
-    try {
-        // Pastikan kueri SQLnya benar
-        const result = await db.query(
-            'INSERT INTO sub_bagian_hsdm (nama_sb_hsdm, nip_sb_hsdm, posisi_sb_hsdm, foto_sb_hsdm, tanggal_lahir, email, komentar_sb_hsdm) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm]
+const checkEmailExists = (email) => {
+    return new Promise((resolve, reject) => {
+        db.query(
+            'SELECT COUNT(*) AS count FROM sub_bagian_hsdm WHERE email = ?',
+            [email],
+            (error, results) => {
+                if (error) {
+                    console.error('Error while checking email in the database:', error);
+                    reject(new Error('Error while checking email in the database: ' + error.message));
+                } else {
+                    // Ambil hasil dan kembalikan true/false
+                    const count = results[0]?.count || 0;
+                    resolve(count > 0);
+                }
+            }
         );
-        console.log(result);  // Cek hasil query
-    } catch (error) {
-        console.error('Error while adding data to the database:', error);
-        throw new Error('Error while adding data to the database: ' + error.message);
-    }
+    });
+};
+
+const insertSubBagianHsdm = (data) => {
+    const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm } = data;
+
+    return new Promise((resolve, reject) => {
+        db.query(
+            'INSERT INTO sub_bagian_hsdm (nama_sb_hsdm, nip_sb_hsdm, posisi_sb_hsdm, foto_sb_hsdm, tanggal_lahir, email, komentar_sb_hsdm) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm],
+            (error, results) => {
+                if (error) {
+                    console.error('Error while adding data to the database:', error);
+                    reject(new Error('Error while adding data to the database: ' + error.message));
+                } else {
+                    resolve(results);
+                }
+            }
+        );
+    });
 };
 
 // Mendapatkan semua data sub bagian HSDM
@@ -53,6 +76,7 @@ const deleteKomentarById = (id, callback) => {
 };
 
 module.exports = {
+    checkEmailExists,
     insertSubBagianHsdm,
     getAllSubBagianHsdm,
     getSubBagianHsdmById,
