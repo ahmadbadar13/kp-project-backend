@@ -4,13 +4,13 @@ const subBagianHsdmModel = require('../../models/Operator/subBagianHsdmOpModel')
 // Create Data Sub Bagian HSDM Operator
 const addSubBagianHsdmOp = async (req, res) => {
     try {
-        const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, komentar_sb_hsdm } = req.body;
+        const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, status_kepegawaian, komentar_sb_hsdm } = req.body;
 
         // Validasi input
-        if (!nama_sb || !nip_sb || !posisi_sb || !tanggal_lahir || !email) {
+        if (!nama_sb || !nip_sb || !posisi_sb || !tanggal_lahir || !email || !status_kepegawaian) {
             return res.status(400).json({
                 success: false,
-                message: 'Nama, NIP, posisi, tanggal lahir, dan email wajib diisi.',
+                message: 'Nama, NIP, posisi, tanggal lahir, email, dan status kepegawaian wajib diisi.',
             });
         }
 
@@ -31,6 +31,7 @@ const addSubBagianHsdmOp = async (req, res) => {
             foto_sb,
             tanggal_lahir,
             email,
+            status_kepegawaian,
             komentar_sb_hsdm,
         });
 
