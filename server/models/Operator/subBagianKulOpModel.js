@@ -21,12 +21,12 @@ const checkEmailExists = (email) => {
 };
 
 const insertSubBagianKul = (data) => {
-    const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, status_kepegawaian, komentar_sb_kul } = data;
+    const { nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, status_kepegawaian, surat_keputusan, komentar_sb_kul } = data;
 
     return new Promise((resolve, reject) => {
         db.query(
-            'INSERT INTO sub_bagian_kul (nama_sb_kul, nip_sb_kul, posisi_sb_kul, foto_sb_kul, tanggal_lahir, email, status_kepegawaian, komentar_sb_kul) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, status_kepegawaian, komentar_sb_kul],
+            'INSERT INTO sub_bagian_kul (nama_sb_kul, nip_sb_kul, posisi_sb_kul, foto_sb_kul, tanggal_lahir, email, status_kepegawaian, surat_keputusan, komentar_sb_kul) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [nama_sb, nip_sb, posisi_sb, foto_sb, tanggal_lahir, email, status_kepegawaian, surat_keputusan, komentar_sb_kul],
             (error, results) => {
                 if (error) {
                     console.error('Error while adding data to the database:', error);
