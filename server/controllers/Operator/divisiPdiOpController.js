@@ -3,12 +3,12 @@ const DivisiPdiModel = require('../../models/Operator/divisiPdiOpModel');
 
 const addDivisiPdiOp = async (req, res) => {
     try {
-        const { nama_div_pdi, foto_div_pdi, tanggal_lahir, email, masa_jabatan, komentar_div_pdi } = req.body;
+        const { nama_div_pdi, nip_pdi, foto_div_pdi, tanggal_lahir, email, masa_jabatan, komentar_div_pdi } = req.body;
 
-        if (!nama_div_pdi || !tanggal_lahir || !email || !masa_jabatan) {
+        if (!nama_div_pdi || !nip_pdi || !tanggal_lahir || !email || !masa_jabatan) {
             return res.status(400).json({
                 success: false,
-                message: 'Nama divisi, tanggal lahir, email, dan masa jabatan wajib diisi.'
+                message: 'Nama divisi, nip, tanggal lahir, email, dan masa jabatan wajib diisi.'
             });
         }
 
@@ -22,6 +22,7 @@ const addDivisiPdiOp = async (req, res) => {
 
         await addDivisiPdi({
             nama_div_pdi,
+            nip_pdi,
             foto_div_pdi,
             tanggal_lahir,
             email,

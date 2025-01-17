@@ -3,12 +3,12 @@ const DivisiSpppSdmModel = require('../../models/Operator/divisiSpppSdmOpModel')
 
 const addDivisiSpppSdmOp = async (req, res) => {
     try {
-        const { nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, masa_jabatan, komentar_div_sppp_sdm } = req.body;
+        const { nama_div_sppp_sdm, nip_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, masa_jabatan, komentar_div_sppp_sdm } = req.body;
 
-        if (!nama_div_sppp_sdm || !tanggal_lahir || !email || !masa_jabatan) {
+        if (!nama_div_sppp_sdm || !nip_sppp_sdm || !tanggal_lahir || !email || !masa_jabatan) {
             return res.status(400).json({
                 success: false,
-                message: 'Nama divisi, tanggal lahir, email, dan masa jabatan wajib diisi.'
+                message: 'Nama divisi, nip, tanggal lahir, email, dan masa jabatan wajib diisi.'
             });
         }
 
@@ -22,6 +22,7 @@ const addDivisiSpppSdmOp = async (req, res) => {
 
         await addDivisiSpppSdm({
             nama_div_sppp_sdm,
+            nip_sppp_sdm,
             foto_div_sppp_sdm,
             tanggal_lahir,
             email,

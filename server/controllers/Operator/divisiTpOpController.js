@@ -3,12 +3,12 @@ const DivisiTpModel = require('../../models/Operator/divisiTpOpModel');
 
 const addDivisiTpOp = async (req, res) => {
     try {
-        const { nama_div_tp, foto_div_tp, tanggal_lahir, email, masa_jabatan, komentar_div_tp } = req.body;
+        const { nama_div_tp, nip_tp, foto_div_tp, tanggal_lahir, email, masa_jabatan, komentar_div_tp } = req.body;
 
-        if (!nama_div_tp || !tanggal_lahir || !email || !masa_jabatan) {
+        if (!nama_div_tp || !nip_tp || !tanggal_lahir || !email || !masa_jabatan) {
             return res.status(400).json({
                 success: false,
-                message: 'Nama divisi, tanggal lahir, email, dan masa jabatan wajib diisi.'
+                message: 'Nama divisi, nip, tanggal lahir, email, dan masa jabatan wajib diisi.'
             });
         }
 
@@ -22,6 +22,7 @@ const addDivisiTpOp = async (req, res) => {
 
         await addDivisiTp({
             nama_div_tp,
+            nip_tp,
             foto_div_tp,
             tanggal_lahir,
             email,

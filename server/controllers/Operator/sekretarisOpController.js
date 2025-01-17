@@ -7,13 +7,13 @@ const sekretarisModel = require('../../models/Operator/sekretarisOpModel');
 
 const addSekretarisOp = async (req, res) => {
     try {
-        const { nama_sekretaris, nip_sekretaris, foto_sekretaris, tanggal_lahir, email, komentar_sekretaris } = req.body;
+        const { nama_sekretaris, nip_sekretaris, foto_sekretaris, tanggal_lahir, email, masa_jabatan, komentar_sekretaris } = req.body;
 
         // Validasi data yang dibutuhkan
-        if (!nama_sekretaris || !nip_sekretaris || !tanggal_lahir || !email) {
+        if (!nama_sekretaris || !nip_sekretaris || !tanggal_lahir || !email || !masa_jabatan) {
             return res.status(400).json({
                 success: false,
-                message: 'Nama sekretaris, NIP, tanggal lahir, dan email wajib diisi.'
+                message: 'Nama, NIP, tanggal lahir, email, dan masa jabatan wajib diisi.'
             });
         }
 
@@ -33,6 +33,7 @@ const addSekretarisOp = async (req, res) => {
             foto_sekretaris,
             tanggal_lahir,
             email,
+            masa_jabatan,
             komentar_sekretaris,
         });
 

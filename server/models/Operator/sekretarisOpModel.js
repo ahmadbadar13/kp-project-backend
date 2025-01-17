@@ -2,11 +2,11 @@ const db = require('../../config/db');
 
 // Menambahkan data Sekretaris
 const insertSekretaris = async (data) => {
-    const { nama_sekretaris, nip_sekretaris, foto_sekretaris, tanggal_lahir, email, komentar_sekretaris } = data;
+    const { nama_sekretaris, nip_sekretaris, foto_sekretaris, tanggal_lahir, email, masa_jabatan, komentar_sekretaris } = data;
     try {
         await db.query(
-            'INSERT INTO sekretaris (nama_sekretaris, nip_sekretaris, foto_sekretaris, tanggal_lahir, email, komentar_sekretaris) VALUES (?, ?, ?, ?, ?, ?)',
-            [nama_sekretaris, nip_sekretaris, foto_sekretaris, tanggal_lahir, email, komentar_sekretaris]
+            'INSERT INTO sekretaris (nama_sekretaris, nip_sekretaris, foto_sekretaris, tanggal_lahir, email, masa_jabatan, komentar_sekretaris) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [nama_sekretaris, nip_sekretaris, foto_sekretaris, tanggal_lahir, email, masa_jabatan, komentar_sekretaris]
         );
     } catch (error) {
         throw new Error('Error while adding data to the database: ' + error.message);

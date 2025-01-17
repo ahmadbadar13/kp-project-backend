@@ -1,11 +1,11 @@
 const db = require('../../config/db');
 
 const addDivisiSpppSdm = async (data) => {
-    const { nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, masa_jabatan, komentar_div_sppp_sdm } = data;
+    const { nama_div_sppp_sdm, nip_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, masa_jabatan, komentar_div_sppp_sdm } = data;
     try {
         await db.query(
-            'INSERT INTO divisi_sppp_sdm (nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, masa_jabatan, komentar_div_sppp_sdm) VALUES (?, ?, ?, ?, ?, ?)',
-            [nama_div_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, masa_jabatan, komentar_div_sppp_sdm]
+            'INSERT INTO divisi_sppp_sdm (nama_div_sppp_sdm, nip_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, masa_jabatan, komentar_div_sppp_sdm) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [nama_div_sppp_sdm, nip_sppp_sdm, foto_div_sppp_sdm, tanggal_lahir, email, masa_jabatan, komentar_div_sppp_sdm]
         );
     } catch (error) {
         throw new Error('Error while adding data to the database: ' + error.message);
